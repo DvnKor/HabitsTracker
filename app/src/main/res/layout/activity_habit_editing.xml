@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Название"
-                android:inputType="textPersonName" />
+                android:inputType="text" />
 
             <EditText
                 android:id="@+id/editDescription"
@@ -38,28 +38,78 @@
                 android:inputType="textMultiLine" />
 
             <RadioGroup
-                android:id="@+id/radioGroup"
+                android:id="@+id/typeRadioGroup"
                 android:layout_width="307dp"
                 android:layout_height="80dp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Тип" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="RadioButton" />
+                    android:text="Позитивная" />
 
                 <RadioButton
                     android:id="@+id/radioButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="RadioButton" />
+                    android:text="Негативная" />
             </RadioGroup>
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/prioritySpinner"
                 android:layout_width="360dp"
                 android:layout_height="48dp"
                 android:entries="@array/priority_array" />
+
+            <LinearLayout
+                android:layout_width="411dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/editNumberOfRepeats"
+                    android:layout_width="25dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="3dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:text="раз в"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editNumberOfDays"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="91dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="дней" />
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:id="@+id/colorPicker"
@@ -106,60 +156,18 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <LinearLayout
-                android:layout_width="411dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="number" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="3dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_weight="1"
-                    android:text="раз в"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="24dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="number" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="91dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="дней" />
-            </LinearLayout>
-
             <Button
                 android:id="@+id/SaveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onSaveClick"
                 android:text="Сохранить" />
 
             <Button
                 android:id="@+id/CancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onCancelClick"
                 android:text="Отменить" />
 
         </LinearLayout>
