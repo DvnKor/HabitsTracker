@@ -42,6 +42,7 @@ class HabitEditingActivity : AppCompatActivity() {
 
     private fun getUpdatedIntent(): Intent {
         val updatedIntent = Intent()
+        val bundle = Bundle()
         updatedIntent.putExtra("name", name)
         updatedIntent.putExtra("description", description)
         updatedIntent.putExtra("type", type)
