@@ -12,12 +12,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     val changeHabitRequestCode = 1
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: HabitsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val habitsInfos: MutableList<HabitInfo> = mutableListOf()
 
+    //TODO: save instance state
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,8 +42,14 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != changeHabitRequestCode) return
-        if (resultCode == Activity.RESULT_OK) {
-            viewAdapter.addHabitInfo(data?.extras?.getSerializable("habitInfo") as HabitInfo)
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            val a = data.extras?.getInt("habitInfoPosition")
+            val position = data.extras?.getInt("habitInfoPosition", -1) ?: -1
+            val habitInfo = data.extras?.getSerializable("habitInfo") as HabitInfo
+            if (position != -1)
+                viewAdapter.changeHabitInfo(position, habitInfo)
+            else
+                viewAdapter.addHabitInfo(habitInfo)
             viewAdapter.notifyDataSetChanged()
         }
     }

@@ -4,23 +4,26 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_habit_editing.*
 
 class HabitEditingActivity : AppCompatActivity() {
     private var habitInfo: HabitInfo? = null
+    private var habitInfoPosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_editing)
         habitInfo = intent?.extras?.getSerializable("habitInfo") as HabitInfo?
+        habitInfoPosition = if (intent.extras?.containsKey("habitInfoPosition") == true)
+            intent.extras?.getInt("habitInfoPosition")
+        else
+            null
         if (habitInfo != null) {
-            val ename = findViewById<EditText>(R.id.editName)
-            val a = editName
             editName.setText(habitInfo?.name ?: "")
             editDescription.setText(habitInfo?.description ?: "")
+            //TODO
             //type
             //p
             editNumberOfDays.setText(habitInfo?.numberOfDays.toString())
@@ -45,6 +48,7 @@ class HabitEditingActivity : AppCompatActivity() {
         val updatedIntent = Intent()
         val bundle = Bundle()
         updatedIntent.putExtra("habitInfo", habitInfo)
+            .putExtra("habitInfoPosition", habitInfoPosition)
         return updatedIntent
     }
 

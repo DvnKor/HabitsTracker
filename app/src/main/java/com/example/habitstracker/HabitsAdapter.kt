@@ -16,7 +16,11 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class HabitViewHolder(private val view: View, private val context: Context) :
+    class HabitViewHolder(
+        private val view: View,
+        private val context: Context,
+        var position: Int?
+    ) :
         RecyclerView.ViewHolder(view), View.OnClickListener {
         var habitInfo = HabitInfo()
 
@@ -36,6 +40,7 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
             Log.i("meh", view.name.text.toString())
             val intent =
                 Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
+                    .putExtra("habitInfoPosition", position)
             //context.startActivity(intent)
             (context as MainActivity).startActivityForResult(intent, context.changeHabitRequestCode)
             //startActivityForResult(HabitEditingActivity(), intent, 1, null)
@@ -53,7 +58,7 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
             .inflate(R.layout.habit_info_view, parent, false)
         // set the view's size, margins, paddings and layout parameters
         // ...
-        return HabitViewHolder(view, parent.context)
+        return HabitViewHolder(view, parent.context, null)
     }
 
 
@@ -63,6 +68,7 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
         // - replace the contents of the view with that element
         holder.bind(habitsInfos[position])
         holder.habitInfo = habitsInfos[position]
+        holder.position = position
 
     }
 
@@ -71,5 +77,9 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
 
     fun addHabitInfo(habitInfo: HabitInfo) {
         habitsInfos.add(habitInfo)
+    }
+
+    fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
+        habitsInfos[habitInfoPosition] = habitInfo
     }
 }
