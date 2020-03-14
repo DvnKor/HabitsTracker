@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val changeHabitRequestCode = 1
+    val changeHabitRequestCode = 1
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: HabitsAdapter
@@ -28,13 +28,8 @@ class MainActivity : AppCompatActivity() {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
     }
 
@@ -48,21 +43,9 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != changeHabitRequestCode) return
         if (resultCode == Activity.RESULT_OK) {
-            viewAdapter.addHabitInfo(getHabitInfoFromExtras(data?.extras))
+            viewAdapter.addHabitInfo(data?.extras?.getSerializable("habitInfo") as HabitInfo)
             viewAdapter.notifyDataSetChanged()
-            Log.i("deb", data?.extras?.getString("type") ?: "no")
         }
-    }
-
-    private fun getHabitInfoFromExtras(extras: Bundle?): HabitInfo {
-        return HabitInfo(
-            name = extras?.getString("name") ?: "",
-            description = extras?.getString("description") ?: "",
-            type = extras?.getString("type") ?: "",
-            priority = extras?.getString("priority") ?: "",
-            numberOfDays = extras?.getInt("numberOfDays") ?: 0,
-            numberOfRepeats = extras?.getInt("numberOfRepeats") ?: 0
-        )
     }
 
 }

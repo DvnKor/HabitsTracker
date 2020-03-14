@@ -1,5 +1,7 @@
 package com.example.habitstracker
 
+import java.io.Serializable
+
 class HabitInfo(
     val name: String = "",
     val description: String = "",
@@ -8,4 +10,4 @@ class HabitInfo(
     val numberOfDays: Int = 0,
     val color: Int = 0,
     val priority: String = ""
-)
+) : Serializable
