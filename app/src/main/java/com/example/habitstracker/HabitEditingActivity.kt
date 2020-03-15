@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import kotlinx.android.synthetic.main.activity_habit_editing.*
 
-
 class HabitEditingActivity : AppCompatActivity() {
     private var habitInfo: HabitInfo? = null
     private var habitInfoPosition: Int? = null
@@ -21,7 +20,7 @@ class HabitEditingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_editing)
         setListeners()
-        habitInfo = intent?.extras?.getSerializable("habitInfo") as HabitInfo?
+        habitInfo = intent?.extras?.getParcelable("habitInfo") as HabitInfo?
         habitInfoPosition = intent.extras?.getInt("habitInfoPosition", -1) ?: -1
         if (habitInfo != null) {
             updateViews(habitInfo)
@@ -82,9 +81,10 @@ class HabitEditingActivity : AppCompatActivity() {
 
     private fun getUpdatedIntent(): Intent {
         val updatedIntent = Intent()
-        updatedIntent.putExtra("habitInfo", habitInfo)
+        if (habitInfo == null)
+            return updatedIntent
+        return updatedIntent.putExtra("habitInfo", habitInfo)
             .putExtra("habitInfoPosition", habitInfoPosition)
-        return updatedIntent
     }
 
     private fun onSaveClick(view: View) {

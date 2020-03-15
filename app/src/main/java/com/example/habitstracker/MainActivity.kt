@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
+//TODO: color picker
+
 class MainActivity : AppCompatActivity() {
     val changeHabitRequestCode = 1
     private lateinit var recyclerView: RecyclerView
@@ -47,11 +49,13 @@ class MainActivity : AppCompatActivity() {
         if (requestCode != changeHabitRequestCode) return
         if (resultCode == Activity.RESULT_OK && data != null) {
             val position = data.extras?.getInt("habitInfoPosition", -1) ?: -1
-            val habitInfo = data.extras?.getParcelable<HabitInfo>("habitInfo") as HabitInfo
-            if (position != -1)
-                viewAdapter.changeHabitInfo(position, habitInfo)
-            else
-                viewAdapter.addHabitInfo(habitInfo)
+            val habitInfo = data.extras?.getParcelable<HabitInfo>("habitInfo")
+            if (habitInfo != null) {
+                if (position != -1)
+                    viewAdapter.changeHabitInfo(position, habitInfo)
+                else
+                    viewAdapter.addHabitInfo(habitInfo)
+            }
             viewAdapter.notifyDataSetChanged()
         }
     }

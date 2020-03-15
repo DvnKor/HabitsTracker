@@ -2,8 +2,9 @@ package com.example.habitstracker
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,15 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
 
         init {
             view.setOnClickListener(this)
+            view.description.movementMethod = ScrollingMovementMethod()
+            view.description.setOnTouchListener { view, event ->
+                view.parent.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_UP -> view.parent.parent
+                        .requestDisallowInterceptTouchEvent(false)
+                }
+                false
+            }
         }
 
         fun bind(habitInfo: HabitInfo) {
@@ -38,7 +48,6 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
         }
 
         override fun onClick(v: View?) {
-            Log.i("meh", view.name.text.toString())
             val intent =
                 Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
                     .putExtra("habitInfoPosition", position)

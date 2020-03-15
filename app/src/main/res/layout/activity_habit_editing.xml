@@ -71,11 +71,23 @@
                 </RadioGroup>
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/prioritySpinner"
-                android:layout_width="360dp"
-                android:layout_height="48dp"
-                android:entries="@array/priority_array" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Приоритет" />
+
+                <Spinner
+                    android:id="@+id/prioritySpinner"
+                    android:layout_width="360dp"
+                    android:layout_height="48dp"
+                    android:entries="@array/priority_array" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="411dp"
@@ -121,50 +133,57 @@
                     android:text="дней" />
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:id="@+id/colorPicker"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <HorizontalScrollView
+                    android:id="@+id/colorPicker"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <Button
-                        android:id="@+id/button5"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Button" />
+                        android:layout_height="match_parent">
 
-                    <Button
-                        android:id="@+id/button4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Button" />
+                        <Button
+                            android:id="@+id/button5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Button" />
 
-                    <Button
-                        android:id="@+id/button3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Button" />
+                        <Button
+                            android:id="@+id/button4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Button" />
 
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Button" />
+                        <Button
+                            android:id="@+id/button3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:width="1000dip"
+                            android:text="Button" />
 
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Button" />
+                        <Button
+                            android:id="@+id/button2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Button" />
 
-                </LinearLayout>
-            </HorizontalScrollView>
+                        <Button
+                            android:id="@+id/button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Button" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
