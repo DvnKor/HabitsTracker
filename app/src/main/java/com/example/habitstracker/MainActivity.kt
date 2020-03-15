@@ -3,7 +3,6 @@ package com.example.habitstracker
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,37 +14,40 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: HabitsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private val habitsInfos: MutableList<HabitInfo> = mutableListOf()
+    private var habitsInfos: ArrayList<HabitInfo> = arrayListOf()
 
-    //TODO: save instance state
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fab.setOnClickListener(this::onFabClick)
+        if (savedInstanceState != null)
+            habitsInfos =
+                savedInstanceState.getParcelableArrayList<HabitInfo>("habitsInfos") as ArrayList<HabitInfo>
         viewManager = LinearLayoutManager(this)
         viewAdapter = HabitsAdapter(habitsInfos)
         recyclerView = habitsRecyclerView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList("habitsInfos", habitsInfos)
+    }
+
     private fun onFabClick(view: View) {
         val intent = Intent(this, HabitEditingActivity::class.java)
         startActivityForResult(intent, changeHabitRequestCode)
-        Log.i("clicked", "clicked")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != changeHabitRequestCode) return
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val a = data.extras?.getInt("habitInfoPosition")
             val position = data.extras?.getInt("habitInfoPosition", -1) ?: -1
-            val habitInfo = data.extras?.getSerializable("habitInfo") as HabitInfo
+            val habitInfo = data.extras?.getParcelable<HabitInfo>("habitInfo") as HabitInfo
             if (position != -1)
                 viewAdapter.changeHabitInfo(position, habitInfo)
             else

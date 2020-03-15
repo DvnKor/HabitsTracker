@@ -30,17 +30,20 @@
 
             <EditText
                 android:id="@+id/editDescription"
-                android:layout_width="309dp"
-                android:layout_height="94dp"
+                android:layout_width="306dp"
+                android:layout_height="113dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Описание"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
 
-            <RadioGroup
-                android:id="@+id/typeRadioGroup"
-                android:layout_width="307dp"
-                android:layout_height="80dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView6"
@@ -48,18 +51,25 @@
                     android:layout_height="wrap_content"
                     android:text="Тип" />
 
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Позитивная" />
+                <RadioGroup
+                    android:id="@+id/typeRadioGroup"
+                    android:layout_width="307dp"
+                    android:layout_height="80dp"
+                    android:checkedButton="@id/radioButton2">
 
-                <RadioButton
-                    android:id="@+id/radioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Негативная" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Позитивная" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Негативная" />
+                </RadioGroup>
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/prioritySpinner"
@@ -156,19 +166,26 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <Button
-                android:id="@+id/SaveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onSaveClick"
-                android:text="Сохранить" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/CancelButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCancelClick"
-                android:text="Отменить" />
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCancelClick"
+                    android:text="Отменить" />
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onSaveClick"
+                    android:text="Сохранить" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

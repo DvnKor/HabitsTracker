@@ -33,6 +33,7 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
             view.description.text = habitInfo.description
             view.type.text = habitInfo.type
             view.priority.text = habitInfo.priority
+            //TODO: перенести в ресурс, запилить склонения
             view.period.text = "${habitInfo.numberOfRepeats} раз в ${habitInfo.numberOfDays} дней"
         }
 
@@ -41,9 +42,7 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
             val intent =
                 Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
                     .putExtra("habitInfoPosition", position)
-            //context.startActivity(intent)
             (context as MainActivity).startActivityForResult(intent, context.changeHabitRequestCode)
-            //startActivityForResult(HabitEditingActivity(), intent, 1, null)
         }
 
     }
