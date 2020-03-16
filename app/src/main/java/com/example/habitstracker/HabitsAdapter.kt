@@ -13,10 +13,6 @@ import kotlinx.android.synthetic.main.habit_info_view.view.*
 class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
     RecyclerView.Adapter<HabitsAdapter.HabitViewHolder>() {
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder.
-    // Each data item is just a string in this case that is shown in a TextView.
     class HabitViewHolder(
         private val view: View,
         private val context: Context,
@@ -43,9 +39,26 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
             view.description.text = habitInfo.description
             view.type.text = habitInfo.type
             view.priority.text = habitInfo.priority
-            //TODO: перенести в ресурс, запилить склонения
-            view.period.text = "${habitInfo.numberOfRepeats} раз в ${habitInfo.numberOfDays} дней"
+            view.setBackgroundColor(habitInfo.color)
+            val repeatsString =
+                context.resources.getQuantityString(
+                    R.plurals.times,
+                    habitInfo.numberOfRepeats,
+                    habitInfo.numberOfRepeats
+                )
+            val daysString =
+                context.resources.getQuantityString(
+                    R.plurals.days,
+                    habitInfo.numberOfDays,
+                    habitInfo.numberOfDays
+                )
+            view.period.text = context.resources.getString(
+                R.string.numberOfRepeatsInDays,
+                repeatsString,
+                daysString
+            )
         }
+
 
         override fun onClick(v: View?) {
             val intent =
@@ -56,31 +69,22 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
 
     }
 
-    // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): HabitViewHolder {
-        // create a new view
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.habit_info_view, parent, false)
-        // set the view's size, margins, paddings and layout parameters
-        // ...
         return HabitViewHolder(view, parent.context, null)
     }
 
-
-    // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.bind(habitsInfos[position])
         holder.habitInfo = habitsInfos[position]
         holder.position = position
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = habitsInfos.size
 
     fun addHabitInfo(habitInfo: HabitInfo) {

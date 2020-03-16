@@ -2,29 +2,100 @@ package com.example.habitstracker
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Spinner
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import kotlinx.android.synthetic.main.activity_habit_editing.*
+import kotlin.math.round
+
 
 class HabitEditingActivity : AppCompatActivity() {
     private var habitInfo: HabitInfo? = null
     private var habitInfoPosition: Int? = null
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_editing)
         setListeners()
         habitInfo = intent?.extras?.getParcelable("habitInfo") as HabitInfo?
         habitInfoPosition = intent.extras?.getInt("habitInfoPosition", -1) ?: -1
+        chosenColorDisplay.setBackgroundColor(habitInfo?.color ?: Color.WHITE)
+        val colors = getGradientColors(60F, 0.5F, 0.5F)
+        val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors)
+        colorPickerLayout.background = gradientDrawable
+        for (buttonNumber in 0 until 16) {
+            val button = Button(this)
+            button.setBackgroundColor(colors[0])
+            val params = LinearLayout.LayoutParams(200, 200)
+            params.setMargins(50, 50, 50, 50)
+            button.layoutParams = params
+            button.setOnClickListener { view ->
+                val color = (view.background as ColorDrawable).color
+                chosenColorDisplay.setBackgroundColor(color)
+                val hsv = FloatArray(3)
+                Color.colorToHSV(color, hsv)
+                val rgb = getRGBFromHex(color)
+                rgbColorView.text =
+                    this.resources.getString(R.string.rgbColorString, rgb[0], rgb[1], rgb[2])
+                hsvColorView.text =
+                    this.resources.getString(R.string.hsvColorString, hsv[0], hsv[1], hsv[2])
+            }
+
+            colorPickerLayout.addView(button)
+        }
+        colorPickerLayout.doOnLayout(this::onButtonsLayout)
+
         if (habitInfo != null) {
             updateViews(habitInfo)
         }
+    }
+
+    private fun getGradientColors(hueStep: Float, saturation: Float, value: Float): IntArray {
+        var currentHue = 0.0F
+        val result = ArrayList<Int>()
+        while (currentHue < 360) {
+            result.add(Color.HSVToColor(floatArrayOf(currentHue, saturation, value)))
+            currentHue += hueStep
+        }
+        return result.toIntArray()
+    }
+
+    private fun onButtonsLayout(view: View) {
+        val layout = view as LinearLayout
+        val drawable = layout.background as GradientDrawable
+        val mutableBitmap =
+            Bitmap.createBitmap(layout.width, layout.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(mutableBitmap)
+        drawable.setBounds(0, 0, layout.width, layout.height)
+        drawable.draw(canvas)
+        for (btn in layout.children) {
+            val pixelX = round(btn.x + btn.width / 2).toInt()
+            val pixelY = round(btn.y + btn.height / 2).toInt()
+            val pixel = mutableBitmap.getPixel(pixelX, pixelY)
+            btn.setBackgroundColor(Color.rgb(pixel.red, pixel.green, pixel.blue))
+        }
+    }
+
+    private fun getRGBFromHex(hex: Int): IntArray {
+        val r = hex and 0xFF0000 shr 16
+        val g = hex and 0xFF00 shr 8
+        val b = hex and 0xFF
+        return intArrayOf(r, g, b)
     }
 
     private fun setListeners() {
@@ -74,7 +145,7 @@ class HabitEditingActivity : AppCompatActivity() {
             numberOfRepeats = editNumberOfRepeats.text.toString().toIntOrNull() ?: 0,
             numberOfDays = editNumberOfDays.text.toString().toIntOrNull() ?: 0,
             priority = prioritySpinner.selectedItem.toString(),
-            color = 0
+            color = (chosenColorDisplay.background as ColorDrawable).color
         )
 
     }

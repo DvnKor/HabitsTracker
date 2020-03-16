@@ -5,4 +5,20 @@
         <item>Средний</item>
         <item>Низкий</item>
     </string-array>
+    <string name="rgbColorString">rgb : ( %1$d, %2$d, %3$d)</string>
+    <string name="hsvColorString">hsv : ( %1$.1f, %2$.1f, %3$.1f)</string>
+    <string name="numberOfRepeatsInDays">%1$s %2$s</string>
+    <plurals name="times">
+        <item quantity="zero">%1$d раз</item>
+        <item quantity="one">%1$d раз</item>
+        <item quantity="few">%1$d раза</item>
+        <item quantity="many">%1$d раз</item>
+    </plurals>
+
+    <plurals name="days">
+        <item quantity="zero">в %1$d дней</item>
+        <item quantity="one">в %1$d день</item>
+        <item quantity="few">в %1$d дня</item>
+        <item quantity="many">в %1$d дней</item>
+    </plurals>
 </resources>

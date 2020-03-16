@@ -1,5 +1,6 @@
 package com.example.habitstracker
 
+import android.graphics.Color
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
@@ -10,6 +11,6 @@ class HabitInfo(
     val type: String = "",
     val numberOfRepeats: Int = 0,
     val numberOfDays: Int = 0,
-    val color: Int = 0,
+    val color: Int = Color.WHITE,
     val priority: String = ""
 ) : Parcelable
