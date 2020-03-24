@@ -94,7 +94,8 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginLeft="16dp">
 
                 <EditText
                     android:id="@+id/editNumberOfRepeats"
@@ -181,7 +182,8 @@
                     <LinearLayout
                         android:id="@+id/colorPickerLayout"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
                 </HorizontalScrollView>
             </LinearLayout>
 

@@ -26,6 +26,7 @@ import kotlin.math.round
 class HabitEditingActivity : AppCompatActivity() {
     private var habitInfo: HabitInfo? = null
     private var habitInfoPosition: Int? = null
+    private val colorPickerSquaresNumber = 16
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,34 +36,40 @@ class HabitEditingActivity : AppCompatActivity() {
         habitInfo = intent?.extras?.getParcelable("habitInfo") as HabitInfo?
         habitInfoPosition = intent.extras?.getInt("habitInfoPosition", -1) ?: -1
         chosenColorDisplay.setBackgroundColor(habitInfo?.color ?: Color.WHITE)
-        val colors = getGradientColors(60F, 0.5F, 0.5F)
-        val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors)
-        colorPickerLayout.background = gradientDrawable
-        for (buttonNumber in 0 until 16) {
-            val button = Button(this)
-            button.setBackgroundColor(colors[0])
-            val params = LinearLayout.LayoutParams(200, 200)
-            params.setMargins(50, 50, 50, 50)
-            button.layoutParams = params
-            button.setOnClickListener { view ->
-                val color = (view.background as ColorDrawable).color
-                chosenColorDisplay.setBackgroundColor(color)
-                val hsv = FloatArray(3)
-                Color.colorToHSV(color, hsv)
-                val rgb = getRGBFromHex(color)
-                rgbColorView.text =
-                    this.resources.getString(R.string.rgbColorString, rgb[0], rgb[1], rgb[2])
-                hsvColorView.text =
-                    this.resources.getString(R.string.hsvColorString, hsv[0], hsv[1], hsv[2])
-            }
-
-            colorPickerLayout.addView(button)
-        }
+        createColorButtons()
         colorPickerLayout.doOnLayout(this::onButtonsLayout)
 
         if (habitInfo != null) {
             updateViews(habitInfo)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun createColorButtons() {
+        val colors = getGradientColors(60F, 0.5F, 0.5F)
+        val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors)
+        colorPickerLayout.background = gradientDrawable
+        for (buttonNumber in 0 until colorPickerSquaresNumber) {
+            val button = Button(this)
+            button.setBackgroundColor(colors[0])
+            val params = LinearLayout.LayoutParams(200, 200)
+            params.setMargins(50, 50, 50, 50)
+            button.layoutParams = params
+            button.setOnClickListener(this::onColorSquareClick)
+            colorPickerLayout.addView(button)
+        }
+    }
+
+    private fun onColorSquareClick(view: View) {
+        val color = (view.background as ColorDrawable).color
+        chosenColorDisplay.setBackgroundColor(color)
+        val hsv = FloatArray(3)
+        Color.colorToHSV(color, hsv)
+        val rgb = getRGBFromHex(color)
+        rgbColorView.text =
+            this.resources.getString(R.string.rgbColorString, rgb[0], rgb[1], rgb[2])
+        hsvColorView.text =
+            this.resources.getString(R.string.hsvColorString, hsv[0], hsv[1], hsv[2])
     }
 
     private fun getGradientColors(hueStep: Float, saturation: Float, value: Float): IntArray {
