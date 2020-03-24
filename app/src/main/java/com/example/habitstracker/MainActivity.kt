@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
-//TODO: color picker
 
 class MainActivity : AppCompatActivity() {
     val changeHabitRequestCode = 1
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fab.setOnClickListener(this::onFabClick)
+        HabitEditingFragment
         if (savedInstanceState != null)
             habitsInfos =
                 savedInstanceState.getParcelableArrayList<HabitInfo>("habitsInfos") as ArrayList<HabitInfo>
