@@ -1,25 +1,26 @@
 package com.example.habitstracker
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Spinner
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_habit_editing.*
 import kotlin.math.round
@@ -27,16 +28,30 @@ import kotlin.math.round
 class HabitEditingFragment : Fragment() {
     companion object {
         private const val habitInfoArgName = "habitInfo"
-        fun newInstance(habitInfo: HabitInfo): HabitEditingFragment {
+        private const val positionArgName = "position"
+        fun newInstance(
+            position: Int? = null,
+            habitInfo: HabitInfo = HabitInfo()
+        ): HabitEditingFragment {
             val fragment = HabitEditingFragment()
             val bundle = Bundle()
             bundle.putParcelable(habitInfoArgName, habitInfo)
+            if (position != null)
+                bundle.putInt(positionArgName, position)
             fragment.arguments = bundle
             return fragment
         }
     }
 
+    private val colorPickerSquaresNumber = 16
     private var habitInfo = HabitInfo()
+    private var position: Int? = null
+    private var habitChangedCallback: IHabitChangedCallback? = null
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        habitChangedCallback = activity as IHabitChangedCallback
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,9 +60,47 @@ class HabitEditingFragment : Fragment() {
         return inflater.inflate(R.layout.activity_habit_editing, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
+        arguments?.let { position = it.getInt(positionArgName) ?: -1 }
+        setListeners()
+        chosenColorDisplay.setBackgroundColor(habitInfo?.color ?: Color.WHITE)
+        createColorButtons()
+        colorPickerLayout.doOnLayout(this::onButtonsLayout)
+
+        if (habitInfo != null) {
+            updateViews(habitInfo)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun createColorButtons() {
+        val colors = getGradientColors(60F, 0.5F, 0.5F)
+        val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors)
+        colorPickerLayout.background = gradientDrawable
+        for (buttonNumber in 0 until colorPickerSquaresNumber) {
+            val button = Button(context)
+            button.setBackgroundColor(colors[0])
+            val params = LinearLayout.LayoutParams(200, 200)
+            params.setMargins(50, 50, 50, 50)
+            button.layoutParams = params
+            button.setOnClickListener(this::onColorSquareClick)
+            colorPickerLayout.addView(button)
+        }
+    }
+
+    private fun onColorSquareClick(view: View) {
+        val color = (view.background as ColorDrawable).color
+        chosenColorDisplay.setBackgroundColor(color)
+        val hsv = FloatArray(3)
+        Color.colorToHSV(color, hsv)
+        val rgb = getRGBFromHex(color)
+        rgbColorView.text =
+            this.resources.getString(R.string.rgbColorString, rgb[0], rgb[1], rgb[2])
+        hsvColorView.text =
+            this.resources.getString(R.string.hsvColorString, hsv[0], hsv[1], hsv[2])
     }
 
     private fun getGradientColors(hueStep: Float, saturation: Float, value: Float): IntArray {
@@ -122,11 +175,11 @@ class HabitEditingFragment : Fragment() {
         return 0
     }
 
-    private fun saveUserInput() {
+    private fun saveUserInput(view: View) {
         habitInfo = HabitInfo(
             name = editName.text.toString(),
             description = editDescription.text.toString(),
-            type = findViewById<RadioButton>(typeRadioGroup.checkedRadioButtonId).text.toString(),
+            type = view.findViewById<RadioButton>(typeRadioGroup.checkedRadioButtonId).text.toString(),
             numberOfRepeats = editNumberOfRepeats.text.toString().toIntOrNull() ?: 0,
             numberOfDays = editNumberOfDays.text.toString().toIntOrNull() ?: 0,
             priority = prioritySpinner.selectedItem.toString(),
@@ -135,22 +188,13 @@ class HabitEditingFragment : Fragment() {
 
     }
 
-    private fun getUpdatedIntent(): Intent {
-        val updatedIntent = Intent()
-        if (habitInfo == null)
-            return updatedIntent
-        return updatedIntent.putExtra("habitInfo", habitInfo)
-            .putExtra("habitInfoPosition", habitInfoPosition)
-    }
 
     private fun onSaveClick(view: View) {
-        saveUserInput()
-        setResult(Activity.RESULT_OK, getUpdatedIntent())
-        finish()
+        saveUserInput(view)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo)
     }
 
     private fun onCancelClick(view: View) {
-        setResult(Activity.RESULT_OK, getUpdatedIntent())
-        finish()
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo)
     }
 }
