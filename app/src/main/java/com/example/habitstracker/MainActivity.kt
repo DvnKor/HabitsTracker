@@ -1,6 +1,5 @@
 package com.example.habitstracker
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
             //val fragment = HabitEditingFragment.newInstance()
         }
         viewManager = LinearLayoutManager(this)
-        viewAdapter = HabitsAdapter(habitsInfos)
+        viewAdapter = HabitsAdapter(habitsInfos, supportFragmentManager)
         recyclerView = habitsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -66,16 +65,16 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
 //    }
 
     override fun onHabitChanged(position: Int?, habitInfo: HabitInfo?) {
-        if (habitInfo == null)
-            return
-        if (position != null) {
-            viewAdapter.changeHabitInfo(position, habitInfo)
-        } else {
-            viewAdapter.addHabitInfo(habitInfo)
+        if (habitInfo != null) {
+            if (position != null && position != -1) {
+                viewAdapter.changeHabitInfo(position, habitInfo)
+            } else {
+                viewAdapter.addHabitInfo(habitInfo)
+            }
+            viewAdapter.notifyDataSetChanged()
         }
-        viewAdapter.notifyDataSetChanged()
         supportFragmentManager.beginTransaction().remove(editingFragment as HabitEditingFragment)
-
+            .commit()
     }
 
 }

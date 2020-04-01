@@ -42,7 +42,21 @@ class HabitListFragment : Fragment() {
         super.onAttach(context)
         habitChangedCallback = activity as IHabitChangedCallback
     }
-
+    //    override fun onCreateViewHolder(
+//        parent: ViewGroup,
+//    viewType: Int
+//    ): HabitViewHolder {
+//        val view = LayoutInflater.from(parent.context)
+//            .inflate(R.layout.habit_info_view, parent, false)
+//        return HabitViewHolder(view, parent.context, supportFragmentManager, null)
+//    }
+//
+//    override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
+//        holder.bind(habitsInfos[position])
+//        holder.habitInfo = habitsInfos[position]
+//        holder.position = position
+//
+//    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

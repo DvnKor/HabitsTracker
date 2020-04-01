@@ -1,8 +1,6 @@
 package com.example.habitstracker
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -47,6 +45,7 @@ class HabitEditingFragment : Fragment() {
     private var habitInfo = HabitInfo()
     private var position: Int? = null
     private var habitChangedCallback: IHabitChangedCallback? = null
+    private var myview: View? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         habitChangedCallback = activity as IHabitChangedCallback
@@ -64,15 +63,12 @@ class HabitEditingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
-        arguments?.let { position = it.getInt(positionArgName) ?: -1 }
+        arguments?.let { position = it.getInt(positionArgName, -1)}
         setListeners()
-        chosenColorDisplay.setBackgroundColor(habitInfo?.color ?: Color.WHITE)
+        chosenColorDisplay.setBackgroundColor(habitInfo.color ?: Color.WHITE)
         createColorButtons()
         colorPickerLayout.doOnLayout(this::onButtonsLayout)
-
-        if (habitInfo != null) {
-            updateViews(habitInfo)
-        }
+        updateViews(habitInfo)
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -149,6 +145,7 @@ class HabitEditingFragment : Fragment() {
         }
     }
 
+    //TODO check не работает!
     private fun updateViews(habitInfo: HabitInfo?) {
         editName.setText(habitInfo?.name ?: "")
         editDescription.setText(habitInfo?.description ?: "")
@@ -175,11 +172,11 @@ class HabitEditingFragment : Fragment() {
         return 0
     }
 
-    private fun saveUserInput(view: View) {
+    private fun saveUserInput() {
         habitInfo = HabitInfo(
             name = editName.text.toString(),
             description = editDescription.text.toString(),
-            type = view.findViewById<RadioButton>(typeRadioGroup.checkedRadioButtonId).text.toString(),
+            type = typeRadioGroup.findViewById<RadioButton>(typeRadioGroup.checkedRadioButtonId).text.toString(),
             numberOfRepeats = editNumberOfRepeats.text.toString().toIntOrNull() ?: 0,
             numberOfDays = editNumberOfDays.text.toString().toIntOrNull() ?: 0,
             priority = prioritySpinner.selectedItem.toString(),
@@ -190,11 +187,11 @@ class HabitEditingFragment : Fragment() {
 
 
     private fun onSaveClick(view: View) {
-        saveUserInput(view)
+        saveUserInput()
         (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo)
     }
 
     private fun onCancelClick(view: View) {
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(null, null)
     }
 }

@@ -1,21 +1,31 @@
 package com.example.habitstracker
 
 import android.content.Context
-import android.content.Intent
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.ListFragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
-class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
-    RecyclerView.Adapter<HabitsAdapter.HabitViewHolder>() {
+
+class HabitsAdapter(
+    private val habitsInfos: MutableList<HabitInfo>,
+    private val supportFragmentManager: FragmentManager,
+    private val parentActivity: AppCompatActivity
+) :
+    FragmentStateAdapter(parentActivity) {
 
     class HabitViewHolder(
         private val view: View,
         private val context: Context,
+        private val supportFragmentManager: FragmentManager,
         var position: Int?
     ) :
         RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -61,31 +71,41 @@ class HabitsAdapter(private val habitsInfos: MutableList<HabitInfo>) :
 
 
         override fun onClick(v: View?) {
-            val intent =
-                Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
-                    .putExtra("habitInfoPosition", position)
-            (context as MainActivity).startActivityForResult(intent, context.changeHabitRequestCode)
+            supportFragmentManager.beginTransaction()
+                .add(R.id.mainLayout, HabitEditingFragment.newInstance(position, habitInfo))
+                .commit()
+//            val intent =
+//                Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
+//                    .putExtra("habitInfoPosition", position)
+//            (context as MainActivity).startActivityForResult(intent, context.changeHabitRequestCode)
         }
 
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): HabitViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.habit_info_view, parent, false)
-        return HabitViewHolder(view, parent.context, null)
+//    override fun onCreateViewHolder(
+//        parent: ViewGroup,
+//    viewType: Int
+//    ): HabitViewHolder {
+//        val view = LayoutInflater.from(parent.context)
+//            .inflate(R.layout.habit_info_view, parent, false)
+//        return HabitViewHolder(view, parent.context, supportFragmentManager, null)
+//    }
+//
+//    override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
+//        holder.bind(habitsInfos[position])
+//        holder.habitInfo = habitsInfos[position]
+//        holder.position = position
+//
+//    }
+
+    override fun getItemCount() = 2
+    override fun createFragment(position: Int): Fragment {
+        return if (position == 0) {
+            HabitListFragment.newInstance(ArrayList(habitsInfos.filter { it.type == "Позитивная" }))
+        } else {
+            HabitListFragment.newInstance(ArrayList(habitsInfos.filter { it.type == "Негативная" }))
+        }
     }
-
-    override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
-        holder.bind(habitsInfos[position])
-        holder.habitInfo = habitsInfos[position]
-        holder.position = position
-
-    }
-
-    override fun getItemCount() = habitsInfos.size
 
     fun addHabitInfo(habitInfo: HabitInfo) {
         habitsInfos.add(habitInfo)
