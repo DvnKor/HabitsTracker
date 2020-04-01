@@ -45,7 +45,6 @@ class HabitEditingFragment : Fragment() {
     private var habitInfo = HabitInfo()
     private var position: Int? = null
     private var habitChangedCallback: IHabitChangedCallback? = null
-    private var myview: View? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         habitChangedCallback = activity as IHabitChangedCallback
@@ -68,6 +67,11 @@ class HabitEditingFragment : Fragment() {
         chosenColorDisplay.setBackgroundColor(habitInfo.color ?: Color.WHITE)
         createColorButtons()
         colorPickerLayout.doOnLayout(this::onButtonsLayout)
+        updateViews(habitInfo)
+    }
+
+    override fun onStart() {
+        super.onStart()
         updateViews(habitInfo)
     }
 
@@ -144,6 +148,7 @@ class HabitEditingFragment : Fragment() {
             false
         }
     }
+
 
     //TODO check не работает!
     private fun updateViews(habitInfo: HabitInfo?) {

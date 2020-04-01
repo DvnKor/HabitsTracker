@@ -20,7 +20,10 @@ import androidx.core.graphics.red
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_habit_editing.*
+import kotlinx.android.synthetic.main.fragment_habit_list.*
 import kotlin.math.round
 
 class HabitListFragment : Fragment() {
@@ -28,46 +31,51 @@ class HabitListFragment : Fragment() {
         private const val habitInfosArgName = "habitInfos"
         fun newInstance(
             habitInfos: ArrayList<HabitInfo> = arrayListOf()
-        ): HabitEditingFragment {
-            val fragment = HabitEditingFragment()
+        ): HabitListFragment {
+            val fragment = HabitListFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(habitInfosArgName, habitInfos)
             fragment.arguments = bundle
             return fragment
         }
     }
-    private var habitInfos : ArrayList<HabitInfo> = arrayListOf()
+
+    private var habitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var habitChangedCallback: IHabitChangedCallback? = null
+    private lateinit var viewAdapter: HabitsRecyclerViewAdapter
     override fun onAttach(context: Context) {
         super.onAttach(context)
         habitChangedCallback = activity as IHabitChangedCallback
     }
-    //    override fun onCreateViewHolder(
-//        parent: ViewGroup,
-//    viewType: Int
-//    ): HabitViewHolder {
-//        val view = LayoutInflater.from(parent.context)
-//            .inflate(R.layout.habit_info_view, parent, false)
-//        return HabitViewHolder(view, parent.context, supportFragmentManager, null)
-//    }
-//
-//    override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
-//        holder.bind(habitsInfos[position])
-//        holder.habitInfo = habitsInfos[position]
-//        holder.position = position
-//
-//    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_habit_editing, container, false)
+        return inflater.inflate(R.layout.fragment_habit_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let { habitInfos = it.getParcelableArrayList(habitInfosArgName) ?: arrayListOf() }
+        arguments?.let {
+            habitInfos = it.getParcelableArrayList(habitInfosArgName) ?: arrayListOf()
+        }
+        val viewManager = LinearLayoutManager(context)
+        viewAdapter = HabitsRecyclerViewAdapter(habitInfos, activity!!.supportFragmentManager)
+        habitsRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+    }
+    fun addHabitInfo(habitInfo: HabitInfo){
+        habitInfos.add(habitInfo)
+        viewAdapter.notifyDataSetChanged()
+    }
+    fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
+        habitInfos[habitInfoPosition] = habitInfo
+        viewAdapter.notifyDataSetChanged()
     }
 
 
