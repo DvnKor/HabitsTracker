@@ -22,7 +22,7 @@ import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_habit_editing.*
+import kotlinx.android.synthetic.main.fragment_habit_editing.*
 import kotlinx.android.synthetic.main.fragment_habit_list.*
 import kotlin.math.round
 

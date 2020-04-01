@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.FieldPosition
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
@@ -36,31 +37,52 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         outState.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
     }
 
+    private fun getArrayToChange(habitType: String): ArrayList<HabitInfo> {
+        return if (habitType == "Позитивная") {
+            positiveHabitInfos
+        } else {
+            negativeHabitInfos
+        }
+    }
 
-    override fun onHabitChanged(position: Int?, habitInfo: HabitInfo?) {
+    override fun onHabitChanged(
+        position: Int?,
+        habitInfo: HabitInfo?,
+        oldHabitInfo: HabitInfo?,
+        oldPosition: Int?
+    ) {
         if (habitInfo != null) {
-            if (position != null && position != -1) {
+            if (oldHabitInfo != null && oldPosition != null && oldPosition != -1) {
+                if (oldHabitInfo.type == habitInfo.type)
+                    changeHabitInfo(position!!, habitInfo)
+                else {
+                    val from = getArrayToChange(oldHabitInfo.type)
+                    val to = getArrayToChange(habitInfo.type)
+                    from.removeAt(oldPosition)
+                    to.add(habitInfo)
+                }
+            }
+            else if (position != null && position != -1) {
                 changeHabitInfo(position, habitInfo)
             } else {
                 addHabitInfo(habitInfo)
             }
         }
-        supportFragmentManager.beginTransaction().replace(R.id.mainLayout, MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos))
-            .commit()
+        supportFragmentManager.beginTransaction().replace(
+            R.id.mainLayout,
+            MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
+        ).commit()
     }
 
     fun addHabitInfo(habitInfo: HabitInfo) {
-        if (habitInfo.type == "Позитивная")
-            positiveHabitInfos.add(habitInfo)
-        else
-            negativeHabitInfos.add(habitInfo)
+        val arrayToAdd = getArrayToChange(habitInfo.type)
+        arrayToAdd.add(habitInfo)
     }
 
     fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
-        if (habitInfo.type == "Позитивная")
-            positiveHabitInfos[habitInfoPosition] = habitInfo
-        else
-            negativeHabitInfos[habitInfoPosition] = habitInfo
+        val arrayToAdd = getArrayToChange(habitInfo.type)
+        arrayToAdd[habitInfoPosition] = habitInfo
+
     }
 
 }

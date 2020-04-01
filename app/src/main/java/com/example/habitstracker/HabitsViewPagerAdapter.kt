@@ -1,18 +1,7 @@
 package com.example.habitstracker
 
-import android.content.Context
-import android.text.method.ScrollingMovementMethod
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.ListFragment
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 
 class HabitsViewPagerAdapter(

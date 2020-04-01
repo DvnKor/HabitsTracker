@@ -20,7 +20,7 @@ import androidx.core.graphics.red
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_habit_editing.*
+import kotlinx.android.synthetic.main.fragment_habit_editing.*
 import kotlin.math.round
 
 class HabitEditingFragment : Fragment() {
@@ -44,6 +44,8 @@ class HabitEditingFragment : Fragment() {
     private val colorPickerSquaresNumber = 16
     private var habitInfo = HabitInfo()
     private var position: Int? = null
+    private var oldhabitInfo = HabitInfo()
+    private var oldposition: Int? = null
     private var habitChangedCallback: IHabitChangedCallback? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,7 +57,7 @@ class HabitEditingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_habit_editing, container, false)
+        return inflater.inflate(R.layout.fragment_habit_editing, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -63,6 +65,8 @@ class HabitEditingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
         arguments?.let { position = it.getInt(positionArgName, -1)}
+        arguments?.let { oldhabitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
+        arguments?.let { oldposition = it.getInt(positionArgName, -1)}
         setListeners()
         chosenColorDisplay.setBackgroundColor(habitInfo.color ?: Color.WHITE)
         createColorButtons()
@@ -193,10 +197,10 @@ class HabitEditingFragment : Fragment() {
 
     private fun onSaveClick(view: View) {
         saveUserInput()
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo, oldhabitInfo, oldposition)
     }
 
     private fun onCancelClick(view: View) {
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(null, null)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(null, null, null, null)
     }
 }
