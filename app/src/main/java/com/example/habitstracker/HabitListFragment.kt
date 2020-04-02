@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_habit_list.*
 
@@ -45,7 +46,10 @@ class HabitListFragment : Fragment() {
             habitInfos = it.getParcelableArrayList(habitInfosArgName) ?: arrayListOf()
         }
         val viewManager = LinearLayoutManager(context)
-        viewAdapter = HabitsRecyclerViewAdapter(habitInfos, activity!!.supportFragmentManager)
+        viewAdapter = HabitsRecyclerViewAdapter(
+            habitInfos,
+            activity!!.findNavController(R.id.nav_host_fragment)
+        )
         habitsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager

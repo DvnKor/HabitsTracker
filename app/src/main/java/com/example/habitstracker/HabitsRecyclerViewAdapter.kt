@@ -1,25 +1,26 @@
 package com.example.habitstracker
 
 import android.content.Context
+import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 class HabitsRecyclerViewAdapter(
     private val habitsInfos: MutableList<HabitInfo>,
-    private val fragmentManager: FragmentManager
+    private val navController: NavController
 ) :
     RecyclerView.Adapter<HabitsRecyclerViewAdapter.HabitViewHolder>() {
 
     class HabitViewHolder(
         private val view: View,
         private val context: Context,
-        private val fragmentManager: FragmentManager,
+        private val navController: NavController,
         var position: Int?
     ) :
         RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -63,11 +64,13 @@ class HabitsRecyclerViewAdapter(
             )
         }
 
-
+        //TODO
         override fun onClick(v: View?) {
-            fragmentManager.beginTransaction()
-                .replace(R.id.mainLayout, HabitEditingFragment.newInstance(position, habitInfo))
-                .commit()
+            val bundle = Bundle()
+            bundle.putParcelable("habitInfo", habitInfo)
+            bundle.putInt("position", position ?: -1)
+
+            navController.navigate(R.id.action_mainFragment_to_habitEditingFragment, bundle)
         }
     }
 
@@ -77,7 +80,7 @@ class HabitsRecyclerViewAdapter(
     ): HabitViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.habit_info_view, parent, false)
-        return HabitViewHolder(view, parent.context, fragmentManager, null)
+        return HabitViewHolder(view, parent.context, navController, null)
     }
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {

@@ -2,20 +2,22 @@ package com.example.habitstracker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
-    private val positiveHabitInfosArgName = "positiveHabitsInfos"
-    private val negativeHabitInfosArgName = "negativeHabitsInfos"
+    private val positiveHabitInfosArgName = "positiveHabitInfos"
+    private val negativeHabitInfosArgName = "negativeHabitInfos"
     private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
-
-    // private val drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer)
+    private lateinit var navController: NavController
     private lateinit var mainFragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_info -> {
@@ -32,7 +34,6 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                 else -> false
             }
         }
-        // drawerLayout.addDrawerListener(drawerToggle)
         if (savedInstanceState != null) {
             positiveHabitInfos =
                 savedInstanceState.getParcelableArrayList<HabitInfo>(positiveHabitInfosArgName) as ArrayList<HabitInfo>
@@ -40,21 +41,23 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                 savedInstanceState.getParcelableArrayList<HabitInfo>(negativeHabitInfosArgName) as ArrayList<HabitInfo>
         }
         mainFragment = MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
-        supportFragmentManager.beginTransaction().add(R.id.mainLayout, mainFragment).commit()
+        val bundle = getHabitInfosBundle()
+        navController.navigate(R.id.mainFragment, bundle)
+    }
+
+    private fun getHabitInfosBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
+        bundle.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
+        return bundle
     }
 
     private fun onHabitsListMenuClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.mainLayout,
-            MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
-        ).commit()
+        navController.navigate(R.id.mainFragment, getHabitInfosBundle())
     }
 
     private fun onAppInfoMenuClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.mainLayout,
-            AppInfoFragment.newInstance()
-        ).commit()
+        navController.navigate(R.id.appInfoFragment)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -93,10 +96,8 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                 addHabitInfo(habitInfo)
             }
         }
-        supportFragmentManager.beginTransaction().replace(
-            R.id.mainLayout,
-            MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
-        ).commit()
+        val bundle = getHabitInfosBundle()
+        navController.navigate(R.id.action_habitEditingFragment_to_mainFragment, bundle)
     }
 
     private fun addHabitInfo(habitInfo: HabitInfo) {

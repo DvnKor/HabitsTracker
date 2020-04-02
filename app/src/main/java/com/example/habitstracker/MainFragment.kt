@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -48,8 +49,6 @@ class MainFragment : Fragment() {
         arguments?.let {
             positiveHabitInfos =
                 it.getParcelableArrayList(positiveHabitInfosArgName) ?: arrayListOf()
-        }
-        arguments?.let {
             negativeHabitInfos =
                 it.getParcelableArrayList(negativeHabitInfosArgName) ?: arrayListOf()
         }
@@ -62,11 +61,10 @@ class MainFragment : Fragment() {
         }.attach()
     }
 
-
     private fun onFabClick(view: View) {
         editingFragment = HabitEditingFragment.newInstance()
-        activity!!.supportFragmentManager.beginTransaction()
-            .replace(R.id.mainLayout, editingFragment as HabitEditingFragment).commit()
+        activity!!.findNavController(R.id.nav_host_fragment)
+            .navigate(R.id.action_mainFragment_to_habitEditingFragment)
 
     }
 
