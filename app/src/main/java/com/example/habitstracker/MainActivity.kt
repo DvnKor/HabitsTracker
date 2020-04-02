@@ -4,17 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.habitstracker.fragments.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private val positiveHabitInfosArgName = "positiveHabitInfos"
     private val negativeHabitInfosArgName = "negativeHabitInfos"
+    private val navControllerStateArgName = "navControllerState"
     private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private lateinit var navController: NavController
-    private lateinit var mainFragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,10 +39,8 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                 savedInstanceState.getParcelableArrayList<HabitInfo>(positiveHabitInfosArgName) as ArrayList<HabitInfo>
             negativeHabitInfos =
                 savedInstanceState.getParcelableArrayList<HabitInfo>(negativeHabitInfosArgName) as ArrayList<HabitInfo>
+            navController.restoreState(savedInstanceState.getBundle(navControllerStateArgName))
         }
-        mainFragment = MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
-        val bundle = getHabitInfosBundle()
-        navController.navigate(R.id.mainFragment, bundle)
     }
 
     private fun getHabitInfosBundle(): Bundle {
@@ -65,6 +62,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
         outState.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
+        outState.putBundle(navControllerStateArgName, navController.saveState())
     }
 
     private fun getArrayToChange(habitType: String): ArrayList<HabitInfo> {

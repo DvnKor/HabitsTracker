@@ -30,6 +30,8 @@ class HabitEditingFragment : Fragment() {
     companion object {
         private const val habitInfoArgName = "habitInfo"
         private const val positionArgName = "position"
+        private const val oldHabitInfoArgName = "oldHabitInfo"
+        private const val oldPositionArgName = "oldPosition"
         fun newInstance(
             position: Int? = null,
             habitInfo: HabitInfo = HabitInfo()
@@ -64,20 +66,38 @@ class HabitEditingFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_habit_editing, container, false)
     }
 
+    private fun restoreState(bundle: Bundle) {
+        habitInfo = bundle.getParcelable(habitInfoArgName) ?: HabitInfo()
+        position = bundle.getInt(positionArgName, -1)
+        oldhabitInfo = bundle.getParcelable(habitInfoArgName) ?: HabitInfo()
+        oldposition = bundle.getInt(positionArgName, -1)
+    }
+
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let {
-            habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo()
-            position = it.getInt(positionArgName, -1)
-            oldhabitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo()
-            oldposition = it.getInt(positionArgName, -1)
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState)
+        } else {
+            arguments?.let {
+                restoreState(it)
+            }
         }
         setListeners()
         chosenColorDisplay.setBackgroundColor(habitInfo.color)
         createColorButtons()
         colorPickerLayout.doOnLayout(this::onButtonsLayout)
         updateViews(habitInfo)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveUserInput()
+        outState.putParcelable(habitInfoArgName, habitInfo)
+        outState.putParcelable(oldHabitInfoArgName, oldhabitInfo)
+        outState.putInt(positionArgName, position ?: -1)
+        outState.putInt(oldPositionArgName, oldposition ?: -1)
+
     }
 
     override fun onStart() {
@@ -188,6 +208,8 @@ class HabitEditingFragment : Fragment() {
     }
 
     private fun saveUserInput() {
+        if (editName == null)
+            return
         habitInfo = HabitInfo(
             name = editName.text.toString(),
             description = editDescription.text.toString(),

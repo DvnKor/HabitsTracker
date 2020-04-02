@@ -66,12 +66,10 @@ class HabitsRecyclerViewAdapter(
             )
         }
 
-        //TODO
         override fun onClick(v: View?) {
             val bundle = Bundle()
             bundle.putParcelable("habitInfo", habitInfo)
             bundle.putInt("position", position ?: -1)
-
             navController.navigate(R.id.action_mainFragment_to_habitEditingFragment, bundle)
         }
     }

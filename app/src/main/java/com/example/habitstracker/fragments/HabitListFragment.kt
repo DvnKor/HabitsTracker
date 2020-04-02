@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habitstracker.HabitInfo
-import com.example.habitstracker.adapters.HabitsRecyclerViewAdapter
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.R
+import com.example.habitstracker.adapters.HabitsRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_habit_list.*
 
 class HabitListFragment : Fragment() {
