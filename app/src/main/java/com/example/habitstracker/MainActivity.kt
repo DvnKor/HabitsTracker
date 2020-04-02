@@ -1,7 +1,6 @@
 package com.example.habitstracker
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -11,7 +10,8 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private val negativeHabitInfosArgName = "negativeHabitsInfos"
     private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
-   // private val drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer)
+
+    // private val drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer)
     private lateinit var mainFragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -154,7 +154,6 @@ class HabitEditingFragment : Fragment() {
     }
 
 
-    //TODO check не работает!
     private fun updateViews(habitInfo: HabitInfo?) {
         editName.setText(habitInfo?.name ?: "")
         editDescription.setText(habitInfo?.description ?: "")
@@ -177,8 +176,9 @@ class HabitEditingFragment : Fragment() {
         for (child in radioGroup.children) {
             if ((child as RadioButton).text == text)
                 return child.id
+
         }
-        return 0
+        return radioGroup.children.first().id
     }
 
     private fun saveUserInput() {
