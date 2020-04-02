@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.habitstracker.fragments.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 

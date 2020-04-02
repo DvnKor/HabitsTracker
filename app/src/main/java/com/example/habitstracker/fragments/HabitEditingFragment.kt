@@ -1,4 +1,4 @@
-package com.example.habitstracker
+package com.example.habitstracker.fragments
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -20,6 +20,9 @@ import androidx.core.graphics.red
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
+import com.example.habitstracker.HabitInfo
+import com.example.habitstracker.IHabitChangedCallback
+import com.example.habitstracker.R
 import kotlinx.android.synthetic.main.fragment_habit_editing.*
 import kotlin.math.round
 
@@ -31,7 +34,8 @@ class HabitEditingFragment : Fragment() {
             position: Int? = null,
             habitInfo: HabitInfo = HabitInfo()
         ): HabitEditingFragment {
-            val fragment = HabitEditingFragment()
+            val fragment =
+                HabitEditingFragment()
             val bundle = Bundle()
             bundle.putParcelable(habitInfoArgName, habitInfo)
             if (position != null)
@@ -63,12 +67,14 @@ class HabitEditingFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let { habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
-        arguments?.let { position = it.getInt(positionArgName, -1) }
-        arguments?.let { oldhabitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
-        arguments?.let { oldposition = it.getInt(positionArgName, -1) }
+        arguments?.let {
+            habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo()
+            position = it.getInt(positionArgName, -1)
+            oldhabitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo()
+            oldposition = it.getInt(positionArgName, -1)
+        }
         setListeners()
-        chosenColorDisplay.setBackgroundColor(habitInfo.color ?: Color.WHITE)
+        chosenColorDisplay.setBackgroundColor(habitInfo.color)
         createColorButtons()
         colorPickerLayout.doOnLayout(this::onButtonsLayout)
         updateViews(habitInfo)

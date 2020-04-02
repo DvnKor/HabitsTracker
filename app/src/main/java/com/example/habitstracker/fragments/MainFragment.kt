@@ -1,4 +1,4 @@
-package com.example.habitstracker
+package com.example.habitstracker.fragments
 
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.example.habitstracker.HabitInfo
+import com.example.habitstracker.adapters.HabitsViewPagerAdapter
+import com.example.habitstracker.R
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -52,7 +55,11 @@ class MainFragment : Fragment() {
             negativeHabitInfos =
                 it.getParcelableArrayList(negativeHabitInfosArgName) ?: arrayListOf()
         }
-        viewAdapter = HabitsViewPagerAdapter(positiveHabitInfos, negativeHabitInfos, this)
+        viewAdapter = HabitsViewPagerAdapter(
+            positiveHabitInfos,
+            negativeHabitInfos,
+            this
+        )
         val viewPager = mainPager
         viewPager.adapter = viewAdapter
         val tabLayout = tabs

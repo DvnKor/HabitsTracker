@@ -1,10 +1,11 @@
-package com.example.habitstracker
+package com.example.habitstracker.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.habitstracker.R
 
 class AppInfoFragment : Fragment() {
     companion object {

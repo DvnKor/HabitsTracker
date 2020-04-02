@@ -1,4 +1,4 @@
-package com.example.habitstracker
+package com.example.habitstracker.adapters
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habitstracker.HabitInfo
+import com.example.habitstracker.R
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 class HabitsRecyclerViewAdapter(
@@ -80,7 +82,12 @@ class HabitsRecyclerViewAdapter(
     ): HabitViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.habit_info_view, parent, false)
-        return HabitViewHolder(view, parent.context, navController, null)
+        return HabitViewHolder(
+            view,
+            parent.context,
+            navController,
+            null
+        )
     }
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {

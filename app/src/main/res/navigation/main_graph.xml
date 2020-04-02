@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/habitEditingFragment"
-        android:name="com.example.habitstracker.HabitEditingFragment"
+        android:name="com.example.habitstracker.fragments.HabitEditingFragment"
         android:label="HabitEditingFragment" >
         <action
             android:id="@+id/action_habitEditingFragment_to_mainFragment"
@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/appInfoFragment"
-        android:name="com.example.habitstracker.AppInfoFragment"
+        android:name="com.example.habitstracker.fragments.AppInfoFragment"
         android:label="AppInfoFragment" >
         <action
             android:id="@+id/action_appInfoFragment_to_mainFragment"
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.habitstracker.MainFragment"
+        android:name="com.example.habitstracker.fragments.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_habitEditingFragment"

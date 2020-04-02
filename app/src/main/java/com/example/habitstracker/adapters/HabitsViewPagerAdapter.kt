@@ -1,7 +1,9 @@
-package com.example.habitstracker
+package com.example.habitstracker.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.habitstracker.HabitInfo
+import com.example.habitstracker.fragments.HabitListFragment
 
 
 class HabitsViewPagerAdapter(
