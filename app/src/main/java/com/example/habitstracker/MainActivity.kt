@@ -1,7 +1,9 @@
 package com.example.habitstracker
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
@@ -9,11 +11,28 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private val negativeHabitInfosArgName = "negativeHabitsInfos"
     private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
+   // private val drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer)
     private lateinit var mainFragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        nav_view.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_info -> {
+                    onAppInfoMenuClick()
+                    drawerLayout.closeDrawers()
+                    true
+                }
+                R.id.nav_habits -> {
+                    onHabitsListMenuClick()
+                    drawerLayout.closeDrawers()
+                    true
+                }
 
+                else -> false
+            }
+        }
+        // drawerLayout.addDrawerListener(drawerToggle)
         if (savedInstanceState != null) {
             positiveHabitInfos =
                 savedInstanceState.getParcelableArrayList<HabitInfo>(positiveHabitInfosArgName) as ArrayList<HabitInfo>
@@ -22,6 +41,20 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         }
         mainFragment = MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
         supportFragmentManager.beginTransaction().add(R.id.mainLayout, mainFragment).commit()
+    }
+
+    private fun onHabitsListMenuClick() {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.mainLayout,
+            MainFragment.newInstance(positiveHabitInfos, negativeHabitInfos)
+        ).commit()
+    }
+
+    private fun onAppInfoMenuClick() {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.mainLayout,
+            AppInfoFragment.newInstance()
+        ).commit()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -76,5 +109,4 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         arrayToAdd[habitInfoPosition] = habitInfo
 
     }
-
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_info"
+        android:icon="@drawable/abc_vector_test"
+        android:title="@string/app_info_menu_title"/>
+    <item
+        android:id="@+id/nav_habits"
+        android:icon="@drawable/abc_vector_test"
+        android:title="@string/habit_list_menu_title"/>
+</menu>

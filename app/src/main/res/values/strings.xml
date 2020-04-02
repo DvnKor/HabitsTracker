@@ -8,6 +8,10 @@
     <string name="rgbColorString">rgb : ( %1$d, %2$d, %3$d)</string>
     <string name="hsvColorString">hsv : ( %1$.1f, %2$.1f, %3$.1f)</string>
     <string name="numberOfRepeatsInDays">%1$s %2$s</string>
+    <string name="open_drawer">opened</string>
+    <string name="close_drawer">closed</string>
+    <string name="habit_list_menu_title">Список привычек</string>
+    <string name="app_info_menu_title">О приложении</string>
     <plurals name="times">
         <item quantity="zero">%1$d раз</item>
         <item quantity="one">%1$d раз</item>
