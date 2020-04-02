@@ -64,9 +64,9 @@ class HabitEditingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { habitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
-        arguments?.let { position = it.getInt(positionArgName, -1)}
+        arguments?.let { position = it.getInt(positionArgName, -1) }
         arguments?.let { oldhabitInfo = it.getParcelable(habitInfoArgName) ?: HabitInfo() }
-        arguments?.let { oldposition = it.getInt(positionArgName, -1)}
+        arguments?.let { oldposition = it.getInt(positionArgName, -1) }
         setListeners()
         chosenColorDisplay.setBackgroundColor(habitInfo.color ?: Color.WHITE)
         createColorButtons()
@@ -197,7 +197,12 @@ class HabitEditingFragment : Fragment() {
 
     private fun onSaveClick(view: View) {
         saveUserInput()
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(position, habitInfo, oldhabitInfo, oldposition)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(
+            position,
+            habitInfo,
+            oldhabitInfo,
+            oldposition
+        )
     }
 
     private fun onCancelClick(view: View) {

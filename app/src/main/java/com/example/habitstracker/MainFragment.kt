@@ -16,7 +16,8 @@ class MainFragment : Fragment() {
         private const val negativeHabitInfosArgName = "negativeHabitInfos"
         fun newInstance(
             positiveHabitInfos: ArrayList<HabitInfo>,
-            negativeHabitInfos: ArrayList<HabitInfo> ): MainFragment {
+            negativeHabitInfos: ArrayList<HabitInfo>
+        ): MainFragment {
             val fragment = MainFragment()
             val bundle = Bundle()
             bundle.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
@@ -62,24 +63,11 @@ class MainFragment : Fragment() {
     }
 
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putParcelableArrayList("habitsInfos", habitsInfos)
-//    }
-
     private fun onFabClick(view: View) {
         editingFragment = HabitEditingFragment.newInstance()
         activity!!.supportFragmentManager.beginTransaction()
             .replace(R.id.mainLayout, editingFragment as HabitEditingFragment).commit()
 
-    }
-
-    fun changeHabitInfo(position: Int, habitInfo: HabitInfo) {
-        viewAdapter.changeHabitInfo(position, habitInfo)
-    }
-
-    fun addHabitInfo(habitInfo: HabitInfo) {
-        viewAdapter.addHabitInfo(habitInfo)
     }
 
 }

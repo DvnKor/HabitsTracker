@@ -1,21 +1,14 @@
 package com.example.habitstracker
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.activity_main.*
-import java.text.FieldPosition
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
-    val changeHabitRequestCode = 1
     private val positiveHabitInfosArgName = "positiveHabitsInfos"
     private val negativeHabitInfosArgName = "negativeHabitsInfos"
     private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
-    private var editingFragment: HabitEditingFragment? = null
     private lateinit var mainFragment: MainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +54,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                     from.removeAt(oldPosition)
                     to.add(habitInfo)
                 }
-            }
-            else if (position != null && position != -1) {
+            } else if (position != null && position != -1) {
                 changeHabitInfo(position, habitInfo)
             } else {
                 addHabitInfo(habitInfo)
@@ -74,12 +66,12 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         ).commit()
     }
 
-    fun addHabitInfo(habitInfo: HabitInfo) {
+    private fun addHabitInfo(habitInfo: HabitInfo) {
         val arrayToAdd = getArrayToChange(habitInfo.type)
         arrayToAdd.add(habitInfo)
     }
 
-    fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
+    private fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
         val arrayToAdd = getArrayToChange(habitInfo.type)
         arrayToAdd[habitInfoPosition] = habitInfo
 

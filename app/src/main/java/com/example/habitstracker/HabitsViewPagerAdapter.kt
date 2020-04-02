@@ -27,18 +27,4 @@ class HabitsViewPagerAdapter(
         }
     }
 
-    fun addHabitInfo(habitInfo: HabitInfo) {
-        if (habitInfo.type == "Позитивная")
-            positiveListFragment.addHabitInfo(habitInfo)
-        else
-            negativeListFragment.addHabitInfo(habitInfo)
-    }
-
-    fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
-        if (habitInfo.type == "Позитивная")
-            positiveListFragment.changeHabitInfo(habitInfoPosition, habitInfo)
-        else
-            negativeListFragment.changeHabitInfo(habitInfoPosition, habitInfo)
-    }
-
 }

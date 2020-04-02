@@ -68,10 +68,6 @@ class HabitsRecyclerViewAdapter(
             fragmentManager.beginTransaction()
                 .replace(R.id.mainLayout, HabitEditingFragment.newInstance(position, habitInfo))
                 .commit()
-//            val intent =
-//                Intent(context, HabitEditingActivity::class.java).putExtra("habitInfo", habitInfo)
-//                    .putExtra("habitInfoPosition", position)
-//            (context as MainActivity).startActivityForResult(intent, context.changeHabitRequestCode)
         }
     }
 
