@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     }
 
     private fun getArrayToChange(habitType: String): ArrayList<HabitInfo> {
+        //TODO: enum
         return if (habitType == "Позитивная") {
             positiveHabitInfos
         } else {

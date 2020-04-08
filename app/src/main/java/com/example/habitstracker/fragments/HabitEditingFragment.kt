@@ -104,7 +104,7 @@ class HabitEditingFragment : Fragment() {
         super.onStart()
         updateViews(habitInfo)
     }
-
+    //TODO: resource
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun createColorButtons() {
         val colors = getGradientColors(60F, 0.5F, 0.5F)
