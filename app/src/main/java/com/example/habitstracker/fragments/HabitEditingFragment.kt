@@ -20,9 +20,12 @@ import androidx.core.graphics.red
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.habitstracker.HabitInfo
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.R
+import com.example.habitstracker.adapters.HabitsRecyclerViewAdapter
+import com.example.habitstracker.viewModels.HabitEditingViewModel
 import kotlinx.android.synthetic.main.fragment_habit_editing.*
 import kotlin.math.round
 
@@ -53,6 +56,7 @@ class HabitEditingFragment : Fragment() {
     private var oldhabitInfo = HabitInfo()
     private var oldposition: Int? = null
     private var habitChangedCallback: IHabitChangedCallback? = null
+    private val habitEditingViewModel: HabitEditingViewModel by activityViewModels()
     override fun onAttach(context: Context) {
         super.onAttach(context)
         habitChangedCallback = activity as IHabitChangedCallback
@@ -104,7 +108,7 @@ class HabitEditingFragment : Fragment() {
         super.onStart()
         updateViews(habitInfo)
     }
-    //TODO: resource
+
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun createColorButtons() {
         val colors = getGradientColors(60F, 0.5F, 0.5F)
@@ -211,6 +215,7 @@ class HabitEditingFragment : Fragment() {
         if (editName == null)
             return
         habitInfo = HabitInfo(
+            id = habitInfo.id,
             name = editName.text.toString(),
             description = editDescription.text.toString(),
             type = typeRadioGroup.findViewById<RadioButton>(typeRadioGroup.checkedRadioButtonId).text.toString(),
@@ -225,15 +230,11 @@ class HabitEditingFragment : Fragment() {
 
     private fun onSaveClick(view: View) {
         saveUserInput()
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(
-            position,
-            habitInfo,
-            oldhabitInfo,
-            oldposition
-        )
+        habitEditingViewModel.changeHabit(habitInfo)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged()
     }
 
     private fun onCancelClick(view: View) {
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged(null, null, null, null)
+        (habitChangedCallback as IHabitChangedCallback).onHabitChanged()
     }
 }

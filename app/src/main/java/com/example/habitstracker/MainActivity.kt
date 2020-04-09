@@ -2,20 +2,36 @@ package com.example.habitstracker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.habitstracker.repository.InMemoryHabitsRepository
+import com.example.habitstracker.viewModels.HabitEditingViewModel
+import com.example.habitstracker.viewModels.HabitsListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
-    private val positiveHabitInfosArgName = "positiveHabitInfos"
-    private val negativeHabitInfosArgName = "negativeHabitInfos"
     private val navControllerStateArgName = "navControllerState"
-    private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
-    private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private lateinit var navController: NavController
+    private lateinit var habitsListViewModel: HabitsListViewModel
+    private lateinit var habitEditingViewModel: HabitEditingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val repository = InMemoryHabitsRepository()
+        habitsListViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return HabitsListViewModel(repository) as T
+            }
+        }).get(HabitsListViewModel::class.java)
+
+        habitEditingViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return HabitEditingViewModel(repository, habitsListViewModel) as T
+            }
+        }).get(HabitEditingViewModel::class.java)
+
         setContentView(R.layout.activity_main)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         nav_view.setNavigationItemSelectedListener {
@@ -35,23 +51,13 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
             }
         }
         if (savedInstanceState != null) {
-            positiveHabitInfos =
-                savedInstanceState.getParcelableArrayList<HabitInfo>(positiveHabitInfosArgName) as ArrayList<HabitInfo>
-            negativeHabitInfos =
-                savedInstanceState.getParcelableArrayList<HabitInfo>(negativeHabitInfosArgName) as ArrayList<HabitInfo>
             navController.restoreState(savedInstanceState.getBundle(navControllerStateArgName))
         }
     }
 
-    private fun getHabitInfosBundle(): Bundle {
-        val bundle = Bundle()
-        bundle.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
-        bundle.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
-        return bundle
-    }
 
     private fun onHabitsListMenuClick() {
-        navController.navigate(R.id.mainFragment, getHabitInfosBundle())
+        navController.navigate(R.id.mainFragment)
     }
 
     private fun onAppInfoMenuClick() {
@@ -60,54 +66,11 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
-        outState.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
         outState.putBundle(navControllerStateArgName, navController.saveState())
     }
 
-    private fun getArrayToChange(habitType: String): ArrayList<HabitInfo> {
-        //TODO: enum
-        return if (habitType == "Позитивная") {
-            positiveHabitInfos
-        } else {
-            negativeHabitInfos
-        }
+    override fun onHabitChanged() {
+        navController.navigate(R.id.action_habitEditingFragment_to_mainFragment)
     }
 
-    override fun onHabitChanged(
-        position: Int?,
-        habitInfo: HabitInfo?,
-        oldHabitInfo: HabitInfo?,
-        oldPosition: Int?
-    ) {
-        if (habitInfo != null) {
-            if (oldHabitInfo != null && oldPosition != null && oldPosition != -1) {
-                if (oldHabitInfo.type == habitInfo.type)
-                    changeHabitInfo(position!!, habitInfo)
-                else {
-                    val from = getArrayToChange(oldHabitInfo.type)
-                    val to = getArrayToChange(habitInfo.type)
-                    from.removeAt(oldPosition)
-                    to.add(habitInfo)
-                }
-            } else if (position != null && position != -1) {
-                changeHabitInfo(position, habitInfo)
-            } else {
-                addHabitInfo(habitInfo)
-            }
-        }
-        val bundle = getHabitInfosBundle()
-        navController.navigate(R.id.action_habitEditingFragment_to_mainFragment, bundle)
-    }
-
-    private fun addHabitInfo(habitInfo: HabitInfo) {
-        val arrayToAdd = getArrayToChange(habitInfo.type)
-        arrayToAdd.add(habitInfo)
-    }
-
-    private fun changeHabitInfo(habitInfoPosition: Int, habitInfo: HabitInfo) {
-        val arrayToAdd = getArrayToChange(habitInfo.type)
-        arrayToAdd[habitInfoPosition] = habitInfo
-
-    }
 }
