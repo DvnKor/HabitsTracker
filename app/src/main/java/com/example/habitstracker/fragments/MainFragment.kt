@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.example.habitstracker.HabitInfo
 import com.example.habitstracker.HabitType
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsViewPagerAdapter
@@ -23,22 +22,6 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
-    companion object {
-        private const val positiveHabitInfosArgName = "positiveHabitInfos"
-        private const val negativeHabitInfosArgName = "negativeHabitInfos"
-        fun newInstance(
-            positiveHabitInfos: ArrayList<HabitInfo>,
-            negativeHabitInfos: ArrayList<HabitInfo>
-        ): MainFragment {
-            val fragment = MainFragment()
-            val bundle = Bundle()
-            bundle.putParcelableArrayList(positiveHabitInfosArgName, positiveHabitInfos)
-            bundle.putParcelableArrayList(negativeHabitInfosArgName, negativeHabitInfos)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
-
     private lateinit var viewAdapter: HabitsViewPagerAdapter
     private var editingFragment: HabitEditingFragment? = null
     private val habitsTypesList = arrayListOf("Позитивные", "Негативные")
