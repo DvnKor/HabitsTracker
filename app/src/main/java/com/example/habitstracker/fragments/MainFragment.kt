@@ -2,6 +2,8 @@ package com.example.habitstracker.fragments
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,9 @@ import com.example.habitstracker.HabitType
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsViewPagerAdapter
 import com.example.habitstracker.viewModels.HabitsListViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
@@ -36,8 +40,6 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewAdapter: HabitsViewPagerAdapter
-    private var positiveHabitInfos: ArrayList<HabitInfo> = arrayListOf()
-    private var negativeHabitInfos: ArrayList<HabitInfo> = arrayListOf()
     private var editingFragment: HabitEditingFragment? = null
     private val habitsTypesList = arrayListOf("Позитивные", "Негативные")
     private val habitsListViewModel: HabitsListViewModel by activityViewModels()
@@ -52,14 +54,10 @@ class MainFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val bottomSheet = bottom_sheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         fab.setOnClickListener(this::onFabClick)
-        arguments?.let {
-            positiveHabitInfos =
-                it.getParcelableArrayList(positiveHabitInfosArgName) ?: arrayListOf()
-            negativeHabitInfos =
-                it.getParcelableArrayList(negativeHabitInfosArgName) ?: arrayListOf()
-        }
         habitsListViewModel.habitInfos.observe(viewLifecycleOwner, Observer { habitInfos ->
             viewAdapter = HabitsViewPagerAdapter(
                 ArrayList(habitInfos.filter { habitInfo -> habitInfo.type == HabitType.Positive.type }),
@@ -73,6 +71,21 @@ class MainFragment : Fragment() {
                 tab.text = habitsTypesList[position]
             }.attach()
         })
+        searchEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                habitsListViewModel.searchByName(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+        sortNameTopButton.setOnClickListener { habitsListViewModel.sortByName(true) }
+        sortNameBottomButton.setOnClickListener { habitsListViewModel.sortByName(false) }
 
     }
 

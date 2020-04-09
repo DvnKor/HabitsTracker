@@ -28,5 +28,6 @@ class HabitEditingViewModel(private val model: IHabitsRepository, private val ha
     fun changeHabit(habitInfo: HabitInfo){
         model.changeHabit(habitInfo.id, habitInfo)
         habitsListViewModel.notifyItemsChanged()
+        habitsListViewModel.sortByName(true)
     }
 }
