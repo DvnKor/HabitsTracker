@@ -56,7 +56,7 @@ class MainFragment : Fragment() {
                 tab.text = habitsTypesList[position]
             }.attach()
         })
-            //TODO Вынести во ViewModel
+
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 habitsListViewModel.searchByName(s.toString())
@@ -77,7 +77,7 @@ class MainFragment : Fragment() {
 
     private fun onFabClick(view: View) {
         editingFragment = HabitEditingFragment.newInstance()
-        activity!!.findNavController(R.id.nav_host_fragment)
+        requireActivity().findNavController(R.id.nav_host_fragment)
             .navigate(R.id.action_mainFragment_to_habitEditingFragment)
 
     }

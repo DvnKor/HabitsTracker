@@ -5,7 +5,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.habitstracker.HabitInfo
 import com.example.habitstracker.fragments.HabitListFragment
 import com.example.habitstracker.repository.IHabitsRepository
-import com.example.habitstracker.repository.InMemoryHabitsRepository
 
 
 class HabitsViewPagerAdapter(

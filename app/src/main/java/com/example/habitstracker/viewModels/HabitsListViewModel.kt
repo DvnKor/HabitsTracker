@@ -1,41 +1,41 @@
 package com.example.habitstracker.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.habitstracker.HabitInfo
 import com.example.habitstracker.repository.IHabitsRepository
 
-class HabitsListViewModel(private val model: IHabitsRepository) : ViewModel() {
-    private lateinit var originalHabitInfos: ArrayList<HabitInfo>
-    private val mutableHabitInfos: MutableLiveData<ArrayList<HabitInfo>> = MutableLiveData()
-    val habitInfos: LiveData<ArrayList<HabitInfo>> = mutableHabitInfos
-
+class HabitsListViewModel(
+    model: IHabitsRepository,
+    lifecycleOwner: LifecycleOwner
+) : ViewModel() {
+    private lateinit var originalHabitInfos: List<HabitInfo>
+    private val mutableHabitInfos: MutableLiveData<List<HabitInfo>> = MutableLiveData()
+    val habitInfos: LiveData<List<HabitInfo>> = mutableHabitInfos
+    private var nameToSearch: String = ""
+    private var isAscending: Boolean = true
     init {
-        load()
+        model.getHabits().observe(lifecycleOwner, Observer { habitInfos ->
+            originalHabitInfos = habitInfos
+            mutableHabitInfos.value = sortListByName(isAscending, filterByName(nameToSearch, habitInfos))
+        })
     }
 
-    private fun load() {
-        val habits = model.getHabits()
-        mutableHabitInfos.value = ArrayList(habits)
-        originalHabitInfos = ArrayList(habits)
+    private fun filterByName(name : String, habitInfos: List<HabitInfo>) : List<HabitInfo>{
+        return habitInfos.filter { habitInfo -> habitInfo.name.startsWith(name) }
     }
-
-    fun searchByName(name: String) {
-        mutableHabitInfos.value =
-            ArrayList(originalHabitInfos.filter { habitInfo -> habitInfo.name.startsWith(name) })
-    }
-
-    fun sortByName(ascending: Boolean) {
-        if (ascending)
-            mutableHabitInfos.value = ArrayList(mutableHabitInfos.value!!.sortedBy { it.name })
+    private fun sortListByName(isAscending: Boolean, habitInfos: List<HabitInfo>) : List<HabitInfo>{
+        return if (isAscending)
+            habitInfos.sortedBy { it.name }
         else
-            mutableHabitInfos.value =
-                ArrayList(mutableHabitInfos.value!!.sortedByDescending { it.name })
+            habitInfos.sortedByDescending { it.name }
+    }
+    fun searchByName(name: String) {
+        nameToSearch = name
+        mutableHabitInfos.value = filterByName(name, originalHabitInfos)
     }
 
-
-    fun notifyItemsChanged() {
-        load()
+    fun sortByName(isAscending: Boolean) {
+        this.isAscending = isAscending
+        mutableHabitInfos.value = sortListByName(isAscending, mutableHabitInfos.value!!)
     }
 }

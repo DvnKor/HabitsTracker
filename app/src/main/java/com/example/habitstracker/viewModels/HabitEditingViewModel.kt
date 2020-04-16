@@ -5,8 +5,7 @@ import com.example.habitstracker.HabitInfo
 import com.example.habitstracker.repository.IHabitsRepository
 
 class HabitEditingViewModel(
-    private val model: IHabitsRepository,
-    private val habitsListViewModel: HabitsListViewModel
+    private val model: IHabitsRepository
 ) : ViewModel() {
 
     init {
@@ -19,7 +18,5 @@ class HabitEditingViewModel(
 
     fun changeHabit(habitInfo: HabitInfo) {
         model.insertOrUpdate(habitInfo)
-        habitsListViewModel.notifyItemsChanged()
-        habitsListViewModel.sortByName(true)
     }
 }
