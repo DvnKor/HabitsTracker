@@ -14,7 +14,7 @@ import com.example.habitstracker.R
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 class HabitsRecyclerViewAdapter(
-    private val habitsInfos: MutableList<HabitInfo>,
+    private var habitsInfos: List<HabitInfo>,
     private val navController: NavController
 ) :
     RecyclerView.Adapter<HabitsRecyclerViewAdapter.HabitViewHolder>() {
@@ -96,5 +96,7 @@ class HabitsRecyclerViewAdapter(
     }
 
     override fun getItemCount() = habitsInfos.size
-
+    fun setHabitInfos(habitsInfos: List<HabitInfo>) {
+        this.habitsInfos = habitsInfos
+    }
 }

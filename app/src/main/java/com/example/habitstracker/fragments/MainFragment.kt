@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.example.habitstracker.HabitType
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsViewPagerAdapter
 import com.example.habitstracker.viewModels.HabitsListViewModel
@@ -41,21 +39,18 @@ class MainFragment : Fragment() {
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         fab.setOnClickListener(this::onFabClick)
-        habitsListViewModel.habitInfos.observe(viewLifecycleOwner, Observer { habitInfos ->
-            //TODO не передавать списки
-            viewAdapter = HabitsViewPagerAdapter(
 
-                ArrayList(habitInfos.filter { habitInfo -> habitInfo.type == HabitType.Positive.type }),
-                ArrayList(habitInfos.filter { habitInfo -> habitInfo.type == HabitType.Negative.type }),
-                this
-            )
-            val viewPager = mainPager
-            viewPager.adapter = viewAdapter
-            val tabLayout = tabs
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = habitsTypesList[position]
-            }.attach()
-        })
+        //TODO не передавать списки
+        viewAdapter = HabitsViewPagerAdapter(
+            this
+        )
+        val viewPager = mainPager
+        viewPager.adapter = viewAdapter
+        val tabLayout = tabs
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = habitsTypesList[position]
+        }.attach()
+
 
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
