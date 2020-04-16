@@ -42,7 +42,9 @@ class MainFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         fab.setOnClickListener(this::onFabClick)
         habitsListViewModel.habitInfos.observe(viewLifecycleOwner, Observer { habitInfos ->
+            //TODO не передавать списки
             viewAdapter = HabitsViewPagerAdapter(
+
                 ArrayList(habitInfos.filter { habitInfo -> habitInfo.type == HabitType.Positive.type }),
                 ArrayList(habitInfos.filter { habitInfo -> habitInfo.type == HabitType.Negative.type }),
                 this
@@ -54,6 +56,7 @@ class MainFragment : Fragment() {
                 tab.text = habitsTypesList[position]
             }.attach()
         })
+            //TODO Вынести во ViewModel
         searchEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 habitsListViewModel.searchByName(s.toString())

@@ -18,7 +18,7 @@ class HabitEditingViewModel(
     }
 
     fun changeHabit(habitInfo: HabitInfo) {
-        model.changeHabit(habitInfo.id, habitInfo)
+        model.insertOrUpdate(habitInfo)
         habitsListViewModel.notifyItemsChanged()
         habitsListViewModel.sortByName(true)
     }

@@ -17,8 +17,8 @@ class HabitsListViewModel(private val model: IHabitsRepository) : ViewModel() {
 
     private fun load() {
         val habits = model.getHabits()
-        mutableHabitInfos.value = habits
-        originalHabitInfos = habits
+        mutableHabitInfos.value = ArrayList(habits)
+        originalHabitInfos = ArrayList(habits)
     }
 
     fun searchByName(name: String) {

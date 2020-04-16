@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.room.Room
+import com.example.habitstracker.repository.HabitsDatabase
 import com.example.habitstracker.repository.InMemoryHabitsRepository
 import com.example.habitstracker.viewModels.HabitEditingViewModel
 import com.example.habitstracker.viewModels.HabitsListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
@@ -19,7 +22,12 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private lateinit var habitEditingViewModel: HabitEditingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val repository = InMemoryHabitsRepository()
+        val db = Room.databaseBuilder(
+            applicationContext,
+            HabitsDatabase::class.java, "HabitsDatabase"
+        ).allowMainThreadQueries().build()
+
+        val repository = db.habitsDao()
         habitsListViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return HabitsListViewModel(repository) as T
