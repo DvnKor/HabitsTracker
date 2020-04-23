@@ -11,11 +11,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.habitstracker.models.HabitInfo
-import com.example.habitstracker.models.HabitType
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsRecyclerViewAdapter
+import com.example.habitstracker.models.HabitInfo
+import com.example.habitstracker.models.HabitType
 import com.example.habitstracker.viewModels.HabitsListViewModel
 import kotlinx.android.synthetic.main.fragment_habit_list.*
 
@@ -69,14 +69,14 @@ class HabitListFragment : Fragment() {
             adapter = viewAdapter
         }
 
-        if(habitType == HabitType.Positive)
+        if (habitType == HabitType.Positive)
             observeHabitInfos(habitsListViewModel.positiveHabitInfos)
         else
             observeHabitInfos(habitsListViewModel.negativeHabitInfos)
 
     }
 
-    private fun observeHabitInfos(habitInfosLiveData: LiveData<List<HabitInfo>>){
+    private fun observeHabitInfos(habitInfosLiveData: LiveData<List<HabitInfo>>) {
         habitInfosLiveData.observe(
             viewLifecycleOwner,
             Observer { habitInfos ->

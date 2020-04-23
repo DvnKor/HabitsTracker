@@ -20,6 +20,7 @@ class HabitsListViewModel(
 
     private var nameToSearch: String = ""
     private var isAscending: Boolean = true
+
     init {
         val db = HabitsDatabase.getInstance(context)
         val repository = db.habitsDao()
@@ -54,8 +55,18 @@ class HabitsListViewModel(
 
     fun sortByName(isAscending: Boolean) {
         this.isAscending = isAscending
-        mutablePositiveHabitInfos.postValue(sortListByName(isAscending, mutablePositiveHabitInfos.value!!))
-        mutableNegativeHabitInfos.postValue(sortListByName(isAscending, mutableNegativeHabitInfos.value!!))
+        mutablePositiveHabitInfos.postValue(
+            sortListByName(
+                isAscending,
+                mutablePositiveHabitInfos.value!!
+            )
+        )
+        mutableNegativeHabitInfos.postValue(
+            sortListByName(
+                isAscending,
+                mutableNegativeHabitInfos.value!!
+            )
+        )
     }
 
     private fun filterByName(name: String, habitInfos: List<HabitInfo>): List<HabitInfo> {

@@ -39,7 +39,7 @@ class MainFragment : Fragment() {
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         fab.setOnClickListener(this::onFabClick)
-        
+
         viewAdapter = HabitsViewPagerAdapter(
             this
         )

@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.room.Room
-import com.example.habitstracker.repository.HabitsDatabase
 import com.example.habitstracker.viewModels.HabitEditingViewModel
 import com.example.habitstracker.viewModels.HabitsListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +18,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private lateinit var habitEditingViewModel: HabitEditingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        //TODO перенести в viewmodel создание базы данных
+//        //TODO перенести в viewmodel создание базы данных *СДЕЛАНО*
 //        val db = Room.databaseBuilder(
 //            applicationContext,
 //            HabitsDatabase::class.java, "HabitsDatabase"

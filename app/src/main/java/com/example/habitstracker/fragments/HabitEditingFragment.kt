@@ -21,9 +21,9 @@ import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.habitstracker.models.HabitInfo
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.R
+import com.example.habitstracker.models.HabitInfo
 import com.example.habitstracker.viewModels.HabitEditingViewModel
 import kotlinx.android.synthetic.main.fragment_habit_editing.*
 import kotlin.math.round

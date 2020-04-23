@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habitstracker.models.HabitInfo
 import com.example.habitstracker.R
+import com.example.habitstracker.models.HabitInfo
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 class HabitsRecyclerViewAdapter(

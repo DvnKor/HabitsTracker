@@ -8,7 +8,7 @@ import com.example.habitstracker.models.HabitInfo
 
 @Database(entities = [HabitInfo::class], version = 1)
 abstract class HabitsDatabase : RoomDatabase() {
-    companion object{
+    companion object {
         private var instance: HabitsDatabase? = null
         fun getInstance(context: Context): HabitsDatabase {
             if (instance == null) {
@@ -20,5 +20,6 @@ abstract class HabitsDatabase : RoomDatabase() {
             return instance!!
         }
     }
+
     abstract fun habitsDao(): RoomHabitsDao
 }
