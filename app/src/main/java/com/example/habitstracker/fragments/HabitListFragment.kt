@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.habitstracker.HabitInfo
-import com.example.habitstracker.HabitType
+import com.example.habitstracker.models.HabitInfo
+import com.example.habitstracker.models.HabitType
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.R
 import com.example.habitstracker.adapters.HabitsRecyclerViewAdapter
@@ -54,7 +55,7 @@ class HabitListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            habitType = it.getString(habitTypeArgName) ?: HabitType.Positive.type
+            habitType = it.getString(habitTypeArgName) ?: HabitType.Positive
         }
         val viewManager = LinearLayoutManager(context)
         viewAdapter =
@@ -67,14 +68,22 @@ class HabitListFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-        habitsListViewModel.habitInfos.observe(
+
+        if(habitType == HabitType.Positive)
+            observeHabitInfos(habitsListViewModel.positiveHabitInfos)
+        else
+            observeHabitInfos(habitsListViewModel.negativeHabitInfos)
+
+    }
+
+    private fun observeHabitInfos(habitInfosLiveData: LiveData<List<HabitInfo>>){
+        habitInfosLiveData.observe(
             viewLifecycleOwner,
             Observer { habitInfos ->
-                this.habitInfos = habitInfos.filter { habitInfo -> habitInfo.type == habitType }
+                this.habitInfos = habitInfos
                 viewAdapter.setHabitInfos(this.habitInfos)
                 viewAdapter.notifyDataSetChanged()
             })
     }
-
 
 }

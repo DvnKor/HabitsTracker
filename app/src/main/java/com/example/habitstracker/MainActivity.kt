@@ -20,21 +20,21 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private lateinit var habitEditingViewModel: HabitEditingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val db = Room.databaseBuilder(
-            applicationContext,
-            HabitsDatabase::class.java, "HabitsDatabase"
-        ).allowMainThreadQueries().build()
-
-        val repository = db.habitsDao()
+//        //TODO перенести в viewmodel создание базы данных
+//        val db = Room.databaseBuilder(
+//            applicationContext,
+//            HabitsDatabase::class.java, "HabitsDatabase"
+//        ).allowMainThreadQueries().build()
+//        val repository = db.habitsDao()
         habitsListViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HabitsListViewModel(repository, this@MainActivity) as T
+                return HabitsListViewModel(applicationContext, this@MainActivity) as T
             }
         }).get(HabitsListViewModel::class.java)
 
         habitEditingViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HabitEditingViewModel(repository) as T
+                return HabitEditingViewModel(applicationContext) as T
             }
         }).get(HabitEditingViewModel::class.java)
 

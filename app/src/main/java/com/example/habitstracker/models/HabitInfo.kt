@@ -1,4 +1,4 @@
-package com.example.habitstracker
+package com.example.habitstracker.models
 
 import android.graphics.Color
 import android.os.Parcelable
@@ -35,7 +35,3 @@ class UUIDConverter{
     }
 }
 
-enum class HabitType(val type: String){
-    Positive("Позитивная"),
-    Negative("Негативная")
-}
