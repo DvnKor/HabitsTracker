@@ -229,8 +229,8 @@ class HabitEditingFragment : Fragment() {
 
     private fun onSaveClick(view: View) {
         saveUserInput()
-        habitEditingViewModel.changeHabit(habitInfo)
-        (habitChangedCallback as IHabitChangedCallback).onHabitChanged()
+        habitEditingViewModel.changeHabit(habitInfo, (habitChangedCallback as IHabitChangedCallback))
+        //(habitChangedCallback as IHabitChangedCallback).onHabitChanged()
     }
 
     private fun onCancelClick(view: View) {
