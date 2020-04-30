@@ -10,7 +10,7 @@ import java.util.*
 @Dao
 @TypeConverters(UUIDConverter::class)
 interface RoomHabitsDao : IHabitsRepository {
-    @Query("SELECT * FROM HabitInfo") //TODO несколько запросов *СДЕЛАНО*
+    @Query("SELECT * FROM HabitInfo")
     override fun getHabits(): LiveData<List<HabitInfo>>
 
     @Query("SELECT * FROM HabitInfo WHERE HabitInfo.type = \"${HabitType.Positive}\"")
@@ -21,10 +21,6 @@ interface RoomHabitsDao : IHabitsRepository {
 
     @Query("SELECT * FROM HabitInfo WHERE HabitInfo.id = :uuid")
     override fun getHabitById(uuid: UUID): HabitInfo?
-
-    //TODO insert, update; transactions *СДЕЛАНО*
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    override fun insertOrUpdate(habitInfo: HabitInfo)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     override fun insert(habitInfo: HabitInfo)

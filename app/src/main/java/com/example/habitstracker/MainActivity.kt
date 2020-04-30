@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         outState.putBundle(navControllerStateArgName, navController.saveState())
     }
 
-    override fun onHabitChanged() {
+    override fun onHabitChanged() { // TODO : выпилить callback
         navController.navigate(R.id.action_habitEditingFragment_to_mainFragment)
     }
 

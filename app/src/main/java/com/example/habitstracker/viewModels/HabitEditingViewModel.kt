@@ -25,8 +25,8 @@ class HabitEditingViewModel(
     fun changeHabit(habitInfo: HabitInfo, habitChangedCallback: IHabitChangedCallback) = launch {
         withContext(Dispatchers.IO) {
             repository.insertOrUpdate(habitInfo)
-            habitChangedCallback.onHabitChanged()
-        }//TODO callback после insert
+            habitChangedCallback.onHabitChanged()//TODO : callback после insert'a *СДЕЛАНО*
+        }
     }
 
     override val coroutineContext: CoroutineContext
