@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.habitstracker.BuildConfig
+import com.example.habitstracker.database.HabitsDatabase
 import com.example.habitstracker.models.HabitInfo
 import com.example.habitstracker.network.HabitServiceProvider
 import com.google.gson.JsonParser

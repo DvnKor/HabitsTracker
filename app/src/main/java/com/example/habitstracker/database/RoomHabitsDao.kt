@@ -1,15 +1,17 @@
-package com.example.habitstracker.repository
+package com.example.habitstracker.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.habitstracker.models.HabitInfo
 import com.example.habitstracker.models.HabitType
 import com.example.habitstracker.models.UUIDConverter
+import com.example.habitstracker.repository.IHabitsRepository
 import java.util.*
 
 @Dao
 @TypeConverters(UUIDConverter::class)
-interface RoomHabitsDao : IHabitsRepository {
+interface RoomHabitsDao :
+    IHabitsRepository {
     @Query("SELECT * FROM HabitInfo")
     override fun getHabits(): LiveData<List<HabitInfo>>
 

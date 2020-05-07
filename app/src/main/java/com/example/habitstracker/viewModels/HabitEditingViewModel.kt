@@ -1,20 +1,13 @@
 package com.example.habitstracker.viewModels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.habitstracker.BuildConfig
 import com.example.habitstracker.IHabitChangedCallback
 import com.example.habitstracker.models.HabitInfo
-import com.example.habitstracker.network.HabitServiceProvider
-import com.example.habitstracker.network.IHabitService
-import com.example.habitstracker.repository.HabitsDatabase
+import com.example.habitstracker.database.HabitsDatabase
 import com.example.habitstracker.repository.HabitsRepositoryProvider
 import com.example.habitstracker.repository.IHabitsRepository
-import com.google.gson.JsonParser
 import kotlinx.coroutines.*
-import retrofit2.Response
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class HabitEditingViewModel(

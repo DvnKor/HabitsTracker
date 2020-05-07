@@ -1,4 +1,4 @@
-package com.example.habitstracker.repository
+package com.example.habitstracker.database
 
 import android.content.Context
 import androidx.room.Database
