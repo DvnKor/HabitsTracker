@@ -8,8 +8,7 @@
     android:padding="16dp"
     app:behavior_hideable="false"
     app:behavior_peekHeight="90dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    >
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <EditText
         android:id="@+id/searchEdit"
