@@ -13,7 +13,7 @@ import java.util.*
 
 @Parcelize
 @Entity
-@TypeConverters(UUIDConverter::class)
+@TypeConverters(UUIDConverter::class, DateConverter::class)
 class HabitInfo(
     @PrimaryKey(autoGenerate = false) val id: UUID = UUID.randomUUID(),
     val name: String = "",
@@ -22,9 +22,22 @@ class HabitInfo(
     val numberOfRepeats: Int = 0,
     val numberOfDays: Int = 0,
     val color: Int = Color.WHITE,
-    val priority: String = ""
+    val priority: String = "",
+    val isSynced: Boolean = false,
+    val date: Date = Date()
 ) : Parcelable
 
+class DateConverter {
+    @TypeConverter
+    fun fromDate(date: Date): Long {
+        return date.time
+    }
+
+    @TypeConverter
+    fun toDate(long: Long): Date {
+        return Date(long)
+    }
+}
 
 class UUIDConverter {
     @TypeConverter
@@ -47,7 +60,7 @@ class HabitJsonSerializer : JsonSerializer<HabitInfo> {
     ): JsonElement = JsonObject().apply {
         addProperty("color", src.color)
         addProperty("count", src.numberOfRepeats)
-        addProperty("date", 0) // TODO: передавать дату
+        addProperty("date", src.date.time)
         addProperty("description", src.description)
         addProperty("frequency", src.numberOfDays)
         val priority = when (src.priority) {
@@ -64,7 +77,8 @@ class HabitJsonSerializer : JsonSerializer<HabitInfo> {
             else -> -1
         }
         addProperty("type", type)
-        addProperty("uid", src.id.toString())
+        if (src.isSynced)
+            addProperty("uid", src.id.toString())
     }
 
 }
@@ -91,7 +105,31 @@ class HabitJsonDeserializer : JsonDeserializer<HabitInfo> {
             1 -> HabitPriority.Average
             2 -> HabitPriority.Low
             else -> HabitPriority.High
-        }
+        },
+        isSynced = true,
+        date = Date(json.asJsonObject.get("date").asLong)
     )
 }
 
+
+class UUIDJsonSerializer : JsonSerializer<UUID> {
+    override fun serialize(
+        src: UUID,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement = JsonObject().apply {
+        addProperty("uid", src.toString())
+    }
+
+}
+
+class UUIDJsonDeserializer : JsonDeserializer<UUID> {
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): UUID =
+        UUID.fromString(json.asJsonObject.get("uid").asString)
+
+
+}

@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habitstracker.R
 import com.example.habitstracker.models.HabitInfo
+import com.example.habitstracker.repository.HabitsRepositoryProvider
 import kotlinx.android.synthetic.main.habit_info_view.view.*
 
 class HabitsRecyclerViewAdapter(
@@ -30,6 +31,9 @@ class HabitsRecyclerViewAdapter(
 
         init {
             view.setOnClickListener(this)
+            view.deleteButton.setOnClickListener {
+                HabitsRepositoryProvider.getInstance(context).delete(habitInfo.id)
+            }
             view.description.movementMethod = ScrollingMovementMethod()
             view.description.setOnTouchListener { view, event ->
                 view.parent.parent.requestDisallowInterceptTouchEvent(true)

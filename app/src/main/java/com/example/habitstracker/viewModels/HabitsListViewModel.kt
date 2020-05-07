@@ -3,13 +3,19 @@ package com.example.habitstracker.viewModels
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.habitstracker.models.HabitInfo
-import com.example.habitstracker.repository.HabitsDatabase
+import com.example.habitstracker.repository.HabitsRepositoryProvider
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 class HabitsListViewModel(
     context: Context,
     lifecycleOwner: LifecycleOwner
-) : ViewModel() {
 
+) : ViewModel(), CoroutineScope {
+    private val job = SupervisorJob()
     private lateinit var originalPositiveHabitInfos: List<HabitInfo>
     private val mutablePositiveHabitInfos: MutableLiveData<List<HabitInfo>> = MutableLiveData()
     val positiveHabitInfos: LiveData<List<HabitInfo>> = mutablePositiveHabitInfos
@@ -22,9 +28,7 @@ class HabitsListViewModel(
     private var isAscending: Boolean = true
 
     init {
-        val db = HabitsDatabase.getInstance(context)
-        val repository = db.habitsDao()
-
+        val repository = HabitsRepositoryProvider.getInstance(context)
         repository.getPositiveHabits().observe(lifecycleOwner, Observer { habitInfos ->
             originalPositiveHabitInfos = habitInfos
             mutablePositiveHabitInfos.postValue(
@@ -79,4 +83,7 @@ class HabitsListViewModel(
         else
             habitInfos.sortedByDescending { it.name }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job + CoroutineExceptionHandler { _, e -> throw e }
 }

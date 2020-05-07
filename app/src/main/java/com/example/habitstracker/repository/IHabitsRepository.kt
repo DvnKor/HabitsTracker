@@ -12,4 +12,5 @@ interface IHabitsRepository {
     fun insertOrUpdate(habitInfo: HabitInfo)
     fun insert(habitInfo: HabitInfo)
     fun update(habitInfo: HabitInfo)
+    fun delete(uuid: UUID)
 }

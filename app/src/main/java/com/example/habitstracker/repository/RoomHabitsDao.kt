@@ -13,10 +13,10 @@ interface RoomHabitsDao : IHabitsRepository {
     @Query("SELECT * FROM HabitInfo")
     override fun getHabits(): LiveData<List<HabitInfo>>
 
-    @Query("SELECT * FROM HabitInfo WHERE HabitInfo.type = \"${HabitType.Positive}\"")
+    @Query("SELECT * FROM HabitInfo WHERE HabitInfo.type = '${HabitType.Positive}'")
     override fun getPositiveHabits(): LiveData<List<HabitInfo>>
 
-    @Query("SELECT * FROM HabitInfo WHERE HabitInfo.type = \"${HabitType.Negative}\"")
+    @Query("SELECT * FROM HabitInfo WHERE HabitInfo.type = '${HabitType.Negative}'")
     override fun getNegativeHabits(): LiveData<List<HabitInfo>>
 
     @Query("SELECT * FROM HabitInfo WHERE HabitInfo.id = :uuid")
@@ -36,4 +36,7 @@ interface RoomHabitsDao : IHabitsRepository {
         else
             update(habitInfo)
     }
+
+    @Query("DELETE FROM HabitInfo WHERE HabitInfo.id = :uuid")
+    override fun delete(uuid: UUID)
 }

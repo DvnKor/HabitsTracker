@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -31,9 +32,6 @@ import kotlin.math.round
 class HabitEditingFragment : Fragment() {
     companion object {
         private const val habitInfoArgName = "habitInfo"
-        private const val positionArgName = "position"
-        private const val oldHabitInfoArgName = "oldHabitInfo"
-        private const val oldPositionArgName = "oldPosition"
         fun newInstance(
             position: Int? = null,
             habitInfo: HabitInfo = HabitInfo()
@@ -42,8 +40,6 @@ class HabitEditingFragment : Fragment() {
                 HabitEditingFragment()
             val bundle = Bundle()
             bundle.putParcelable(habitInfoArgName, habitInfo)
-            if (position != null)
-                bundle.putInt(positionArgName, position)
             fragment.arguments = bundle
             return fragment
         }
@@ -51,9 +47,6 @@ class HabitEditingFragment : Fragment() {
 
     private val colorPickerSquaresNumber = 16
     private var habitInfo = HabitInfo()
-    private var position: Int? = null
-    private var oldhabitInfo = HabitInfo()
-    private var oldposition: Int? = null
     private var habitChangedCallback: IHabitChangedCallback? = null
     private val habitEditingViewModel: HabitEditingViewModel by activityViewModels()
     override fun onAttach(context: Context) {
@@ -71,9 +64,6 @@ class HabitEditingFragment : Fragment() {
 
     private fun restoreState(bundle: Bundle) {
         habitInfo = bundle.getParcelable(habitInfoArgName) ?: HabitInfo()
-        position = bundle.getInt(positionArgName, -1)
-        oldhabitInfo = bundle.getParcelable(habitInfoArgName) ?: HabitInfo()
-        oldposition = bundle.getInt(positionArgName, -1)
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -97,9 +87,6 @@ class HabitEditingFragment : Fragment() {
         super.onSaveInstanceState(outState)
         saveUserInput()
         outState.putParcelable(habitInfoArgName, habitInfo)
-        outState.putParcelable(oldHabitInfoArgName, oldhabitInfo)
-        outState.putInt(positionArgName, position ?: -1)
-        outState.putInt(oldPositionArgName, oldposition ?: -1)
 
     }
 
@@ -221,15 +208,25 @@ class HabitEditingFragment : Fragment() {
             numberOfRepeats = editNumberOfRepeats.text.toString().toIntOrNull() ?: 0,
             numberOfDays = editNumberOfDays.text.toString().toIntOrNull() ?: 0,
             priority = prioritySpinner.selectedItem.toString(),
-            color = (chosenColorDisplay.background as ColorDrawable).color
+            color = (chosenColorDisplay.background as ColorDrawable).color,
+            isSynced = habitInfo.isSynced
         )
 
     }
 
-
     private fun onSaveClick(view: View) {
-        saveUserInput()
-        habitEditingViewModel.changeHabit(habitInfo, (habitChangedCallback as IHabitChangedCallback))
+
+        if (TextUtils.isEmpty(editName.text)) {
+            Toast.makeText(context, "Введите название", Toast.LENGTH_SHORT).show()
+        } else if (TextUtils.isEmpty(editDescription.text)) {
+            Toast.makeText(context, "Введите описание", Toast.LENGTH_SHORT).show()
+        } else {
+            saveUserInput()
+            habitEditingViewModel.changeHabit(
+                habitInfo,
+                (habitChangedCallback as IHabitChangedCallback)
+            )
+        }
         //(habitChangedCallback as IHabitChangedCallback).onHabitChanged()
     }
 

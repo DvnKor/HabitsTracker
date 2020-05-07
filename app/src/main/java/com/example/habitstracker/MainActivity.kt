@@ -2,13 +2,17 @@ package com.example.habitstracker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.habitstracker.viewModels.HabitEditingViewModel
 import com.example.habitstracker.viewModels.HabitsListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.menu_header.*
 
 
 class MainActivity : AppCompatActivity(), IHabitChangedCallback {
@@ -18,21 +22,15 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
     private lateinit var habitEditingViewModel: HabitEditingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        //TODO перенести в viewmodel создание базы данных *СДЕЛАНО*
-//        val db = Room.databaseBuilder(
-//            applicationContext,
-//            HabitsDatabase::class.java, "HabitsDatabase"
-//        ).allowMainThreadQueries().build()
-//        val repository = db.habitsDao()
         habitsListViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HabitsListViewModel(applicationContext, this@MainActivity) as T
+                return HabitsListViewModel(this@MainActivity, this@MainActivity) as T
             }
         }).get(HabitsListViewModel::class.java)
 
         habitEditingViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HabitEditingViewModel(applicationContext) as T
+                return HabitEditingViewModel(this@MainActivity) as T
             }
         }).get(HabitEditingViewModel::class.java)
 
@@ -54,11 +52,21 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
                 else -> false
             }
         }
+        drawerLayout.doOnLayout {
+            Glide.with(this)
+                .load("https://images-na.ssl-images-amazon.com/images/I/81-yKbVND-L.png")
+                .override(80, 80)
+                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .error(R.drawable.ic_error_black_24dp)
+                .transform(CircleCrop())
+                .into(userPicImageView)
+        }
+
         if (savedInstanceState != null) {
             navController.restoreState(savedInstanceState.getBundle(navControllerStateArgName))
         }
-    }
 
+    }
 
     private fun onHabitsListMenuClick() {
         navController.navigate(R.id.mainFragment)
@@ -73,7 +81,7 @@ class MainActivity : AppCompatActivity(), IHabitChangedCallback {
         outState.putBundle(navControllerStateArgName, navController.saveState())
     }
 
-    override fun onHabitChanged() { // TODO : выпилить callback
+    override fun onHabitChanged() {
         navController.navigate(R.id.action_habitEditingFragment_to_mainFragment)
     }
 
